@@ -1,0 +1,41 @@
+Estas son algunas de las cosas que me parece se pueden mejorar: 
+
+- Letras, Las letras de la app son muy peq. Con la finalidad de 
+brindar al usuario una buena experiencia, siempre es mejor que sean 
+medias o grandes. En este caso la app solo sera utilizada en desktop por lo que 
+se debe aprovechar eso.
+
+Esto se refiere a los titulos, inputs, parragos, botones.
+
+- Layout, El layout deberia estar centrado con largo (width) dinamico,
+es decir en % y no en unidades fijas como px, em, rem. 
+Esto incluye el footer y navbar, todo debe estar alineado.
+Alignment es uno de los principios de graphic design, y aunque no 
+nos corresponde el diseño, aplicar los principios basicos es necesario.
+
+Una app es un producto, no importa si el codigo es bueno cuando
+la interfaz luce mal, los seres humanos son compradores visuales.
+
+
+####
+
+A nivel de estilos eso es lo que veo que se puede mejorar,
+siempre hay algun detalle, y realmente nunca se tiene un producto
+perfecto.
+
+A nivel de logica de la app.
+
+Faltan: 
+
+- Autenticacion y Autorizacion
+
+- Validacion y eso es muy importante.
+si el usuario esta cansado y manda algo que no es se podria registrar
+o guardar algo que no tiene sentido o peor aun, se podria generar
+un error que tumbe la aplicacion.
+
+- Manejo de errores (en conjunto con validacion)
+
+- Notificaciones
+
+

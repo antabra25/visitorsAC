@@ -1,0 +1,85 @@
+
+.boxLogin {
+    @apply  w-[450px] h-[240px]  mt-20 mb-60 pt-8 mx-auto bg-royal drop-shadow-cs rounded-[10px];
+}
+
+.loginInput {
+    @apply h-10 w-60 bg-white rounded font-content font-medium text-royal border-2 border-slate-500 focus:border-oran;
+}
+
+.loginInput:focus {
+    outline: none;
+}
+
+input[placeholder] {
+    @apply pl-2;
+}
+
+input {
+
+}
+
+.loginBtn {
+    @apply bg-boregray w-[110px] h-[30px] mt-2  mb-2 rounded font-title font-bold text-xs drop-shadow-cs text-dracula hover:bg-firered hover:text-white;
+}
+
+.app-container {
+
+    @apply w-full min-h-screen relative bg-dirtywhite;
+}
+
+.main-content-wrapper {
+    @apply w-full min-h-full mb-24;
+}
+
+.content {
+    max-width: 1000px;
+    @apply pt-6 w-10/12 mx-auto min-h-screen lg:pt-24;
+}
+
+.main-wrapper {
+    @apply h-full;
+}
+
+.title {
+    @apply mt-[60px] font-subtitle font-medium text-black text-2xl pb-[125px] text-center
+}
+
+
+.form {
+    @apply flex flex-row flex-wrap w-[538px] gap-x-[38px] gap-y-[24px] relative mx-auto
+}
+
+.register-btn {
+    @apply mx-[210px] mt-28
+}
+
+table {
+
+    border-collapse: collapse;
+    background: linear-gradient(180deg, rgba(229, 229, 229, 0.2) 23.02%, rgba(229, 229, 229, 0.132) 30.73%, rgba(41, 92, 152, 0.2) 79.17%),
+    linear-gradient(0deg, #FFFFFF, #FFFFFF);
+    @apply w-[650px] mx-[395px] mt-7
+}
+
+table thead {
+
+    @apply bg-[#2A2F35] text-white text-sm h-8
+}
+
+table, th, td {
+    border: 1px dashed rgba(41, 92, 152, 1);
+}
+
+td {
+    @apply text-center h-[30px] p-1.5
+}
+
+.small {
+    display: block;
+    position: absolute;
+    left: 0px;
+    top: 80px;
+    color: red;
+}
+
