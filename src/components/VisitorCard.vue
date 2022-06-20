@@ -4,14 +4,14 @@
       <h1 class="card-title">Visitante</h1>
       <div class="layout-content">
         <div class="card-avatar ">
-          <img src="../assets/avatar.png" alt="">
+          <img :src="" alt="">
         </div>
         <div class="info">
-          <h2>Mary Mujica</h2>
-          <h2>25.506.852</h2>
-          <h2>Edif:</h2>
-          <h2>Oficina:</h2>
-          <h2>Piso:</h2>
+          <h2>{{name}} {{lasname}}</h2>
+          <h2>{{ci}}</h2>
+          <h2>Edif:{{building}}</h2>
+          <h2>Oficina:{{office}}</h2>
+          <h2>Piso: {{flat}}</h2>
         </div>
         <div class="controls-btn items-end">
           <edit-button></edit-button>
@@ -29,6 +29,7 @@ import DeleteButton from "./DeleteButton.vue";
 
 export default {
   name: "VisitorCard",
+  props:['name','lastname']
   components: {
     DeleteButton,
     EditButton

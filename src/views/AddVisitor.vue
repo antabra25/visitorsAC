@@ -214,7 +214,14 @@ export default {
               }
           ).catch(
               error => {
-                console.error("Error", error);
+                if(error.response.status === 403){
+
+                }else if (error.response.status ===404){
+
+                } else if(error.response.status > 404){
+
+                }
+
               }
           );
     },
