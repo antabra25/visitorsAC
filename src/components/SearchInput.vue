@@ -1,14 +1,14 @@
 <template>
   <div class="search-field">
     <img src="../assets/svg/search-red.svg" alt="" id="lupa-icon">
-    <input type="search" :placeholder="name">
+    <input type="search" :placeholder="name" @input="$emit('update:modelValue',$event.target.value)" :value="modelValue">
   </div>
 </template>
 
 <script>
 export default {
   name: "SearchInput",
-  props: ["name"]
+  props: ["name","modelValue"]
 };
 </script>
 
@@ -23,7 +23,7 @@ input[placeholder="Buscar"] {
 }
 
 .search-field {
-  @apply relative mt-[99px] ml-[83px]
+  @apply relative
 }
 
 #lupa-icon {
