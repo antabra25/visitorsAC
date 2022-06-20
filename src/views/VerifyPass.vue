@@ -18,7 +18,6 @@
 </template>
 
 <script>
-
 import EntrySmallOff from "../components/EntrySmallOff.vue";
 import WebCam from "../components/WebCam.vue";
 import InfoMessage from "../components/InfoMessage.vue";
@@ -42,38 +41,33 @@ export default {
       office: "",
       message: "",
       showMessage: false,
-      photo: ""
-
-
+      photo: "",
+      updated: null
     };
   },
   methods: {
-    async realeaseLocation() {
-      this.axios.put("/locations/update", {
+    async releaseLocation() {
+      const user_id = localStorage.getItem("user_id")
+      this.axios.put(`/locations/update/${user_id}`, {
         available: true
       }).then(
           response => {
-            if (response.status == 200) {
-
-              return true
+            if (response.status === 200) {
+              this.updated = true
             }
           }
       ).catch(
           error => {
-
-            if (error.response.status == 404) {
-              this.message = "Error No se desactivo la localizacion"
+            if (error.response.status === 404) {
+              this.updated = false
+              this.message = "Error No se Desactivo la localizacion"
               this.showMessage = true
-              return false
 
             }
-
           }
       )
     },
     async checkPass() {
-
-
       if (this.photo) {
         await this.axios.post("/check/create", {
           qr: this.photo
@@ -86,27 +80,22 @@ export default {
                 this.lastName = visitor.lastname
                 this.flat = visitor.flat
                 this.office = visitor.office
-                console.log(this.name)
-
               }
             }
         ).catch(
             async error => {
-              if (error.response.status == 401) {
-
-                console.log("Autentificate otra vez")
-                /* Habilitar(Activar) la localizacion del usuario actual */
-                const res = await this.realeaseLocation()
-                if (res) {
+              if (error.response.status === 401) {
+                console.log("Estoy dentro del condicional 401")
+                await this.releaseLocation()
+                if (this.updated === true) {
+                  console.log("Estoy dentro de la respuesta del 401 ")
                   /* Limpiar localStorage */
                   localStorage.clear()
                   this.$router.push("/")
                 }
-
-
               } else if (error.response.status > 401) {
                 /* Notificar error al usuario */
-
+                console.log(error.response.data)
               }
             }
         );

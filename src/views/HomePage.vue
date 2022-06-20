@@ -33,7 +33,6 @@ export default {
       hour: null,
       minutes: null,
       seconds: null,
-
     }
   },
   created() {

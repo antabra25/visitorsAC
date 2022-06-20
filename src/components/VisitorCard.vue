@@ -4,7 +4,7 @@
       <h1 class="card-title">Visitante</h1>
       <div class="layout-content">
         <div class="card-avatar ">
-          <img :src="" alt="">
+          <img src="jdksjlds" alt="">
         </div>
         <div class="info">
           <h2>{{name}} {{lasname}}</h2>
@@ -29,7 +29,7 @@ import DeleteButton from "./DeleteButton.vue";
 
 export default {
   name: "VisitorCard",
-  props:['name','lastname']
+  props:['name','lastname'],
   components: {
     DeleteButton,
     EditButton

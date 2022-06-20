@@ -1,5 +1,5 @@
 <template>
-  <div class="main-content-wrapper">
+  <div class="lg:main-content-wrapper 2xl:mb-[342px]">
     <div>
       <h1 class="font-title text-deepblue text-5xl font-bold text-center mt-28">Conectarse</h1>
       <login-box></login-box>
@@ -17,7 +17,9 @@ export default {
     LoginBox
   },
   data() {
-    return {}
+    return {
+
+    }
   }
 }
 </script>

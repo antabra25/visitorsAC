@@ -1,11 +1,9 @@
 <template>
 
-
   <div class="main-content-wrapper">
     <h1 class="title-local">Visitantes Activos</h1>
     <search-input name="Buscar"></search-input>
     <div class="visitor-layout">
-
 
     </div>
   </div>

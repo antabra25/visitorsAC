@@ -1,5 +1,5 @@
 <template>
-  <div class="main-content-wrapper">
+  <div class="xl:main-content-wrapper md:main-content-wrapper md:mb-[150px] 2xl:mb-[320px]">
     <h1 class="title">Registro de Coordenadas</h1>
     <info-message :is-display="showMessage" @close-tab="closeTab">{{ message }}</info-message>
     <form @submit.prevent="sendLocation" class="form">

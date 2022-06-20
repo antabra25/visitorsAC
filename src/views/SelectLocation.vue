@@ -1,5 +1,5 @@
 <template>
-  <div class="main-content-wrapper mt-8 pb-40">
+  <div class="md:main-content-wrapper md:mt-8 md:pb-40 2xl:mb-[300px]">
     <h1 class="title">Selecciona Tu Ubicacion</h1>
     <info-message :is-display="showMessage">{{ message }}</info-message>
     <form @submit.prevent="updateUserLocation" class="form">
@@ -38,9 +38,7 @@ export default {
   },
   methods: {
     async updateUserLocation() {
-
       const userId = localStorage.getItem("user_id");
-
       await this.axios.put(`/users/update/location/${userId}`, {
         location_id: this.location
       }).then(
@@ -52,7 +50,7 @@ export default {
       ).catch(
         error => {
           if (error.response.status === 404 || error.response.status > 400) {
-            this.message = "Error Localizacion no asignada";
+            this.message = "Error Localizacion no Asignada";
             this.showMessage = true;
 
           }
