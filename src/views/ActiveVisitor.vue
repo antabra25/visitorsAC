@@ -5,8 +5,7 @@
     <h1 class="title-local">Visitantes Activos</h1>
     <search-input name="Buscar"></search-input>
     <div class="visitor-layout">
-      <visitor-card></visitor-card>
-      <visitor-card></visitor-card>
+
 
     </div>
   </div>
