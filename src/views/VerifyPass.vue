@@ -41,63 +41,55 @@ export default {
       office: "",
       message: "",
       showMessage: false,
-      photo: "",
-      updated: null
+      photo: ""
     };
   },
   methods: {
     async releaseLocation() {
-      const user_id = localStorage.getItem("user_id")
-      this.axios.put(`/locations/update/${user_id}`, {
-        available: true
-      }).then(
-          response => {
-            if (response.status === 200) {
-              this.updated = true
-            }
-          }
-      ).catch(
-          error => {
-            if (error.response.status === 404) {
-              this.updated = false
-              this.message = "Error No se Desactivo la localizacion"
-              this.showMessage = true
+      const user_id = localStorage.getItem("user_id");
+      try {
+        const response = await this.axios.put(`/locations/update/${user_id}`, {
+          available: true
+        });
+        if (response.status === 200) {
+          localStorage.clear();
+          this.$router.push("/");
+        }
+      } catch (error) {
 
-            }
-          }
-      )
+        if (error.response.status === 404) {
+          this.message = "Error No se Desactivo la localizacion";
+          this.showMessage = true;
+
+        }
+
+      }
     },
     async checkPass() {
       if (this.photo) {
         await this.axios.post("/check/create", {
           qr: this.photo
         }).then(response => {
-              if (response.status === 201) {
-                const visitor = response.data
-                this.passId = visitor.pass_id
-                this.ci = visitor.ci
-                this.name = visitor.name
-                this.lastName = visitor.lastname
-                this.flat = visitor.flat
-                this.office = visitor.office
-              }
+            if (response.status === 201) {
+              const visitor = response.data;
+              this.passId = visitor.pass_id;
+              this.ci = visitor.ci;
+              this.name = visitor.name;
+              this.lastName = visitor.lastname;
+              this.flat = visitor.flat;
+              this.office = visitor.office;
             }
+          }
         ).catch(
-            async error => {
-              if (error.response.status === 401) {
-                console.log("Estoy dentro del condicional 401")
-                await this.releaseLocation()
-                if (this.updated === true) {
-                  console.log("Estoy dentro de la respuesta del 401 ")
-                  /* Limpiar localStorage */
-                  localStorage.clear()
-                  this.$router.push("/")
-                }
-              } else if (error.response.status > 401) {
-                /* Notificar error al usuario */
-                console.log(error.response.data)
-              }
+          error => {
+            if (error.response.status === 401) {
+              const res = this.releaseLocation();
+            } else if (error.response.status > 401) {
+              /* Notificar error al usuario */
+              this.message = "No se logro verificar";
+              this.showMessage = true;
             }
+          }
         );
       }
     }

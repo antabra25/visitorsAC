@@ -18,7 +18,7 @@
                     @focusout="validateAddress">
           <template #default>
             <small class="small" v-if="validAddress === false">
-              {{addressMessage}}
+              {{ addressMessage }}
             </small>
           </template>
         </entry-long>
@@ -42,93 +42,115 @@ export default {
   },
   data() {
     return {
-      name: '',
-      address: '',
+      name: "",
+      address: "",
       isCheckRegister: false,
-      message: '',
+      message: "",
       nameBuildingMessage: "",
       addressMessage: "",
       validFields: null,
       validName: null,
       validAddress: null,
       showMessage: false
-    }
+    };
   },
   methods: {
+    async releaseLocation() {
+      const user_id = localStorage.getItem("user_id");
+      try {
+        const response = await this.axios.put(`/locations/update/${user_id}`, {
+          available: true
+        });
+        if (response.status === 200) {
+          localStorage.clear();
+          this.$router.push("/");
+        }
+      } catch (error) {
 
+        if (error.response.status === 404) {
+          this.message = "Error No se Desactivo la localizacion";
+          this.showMessage = true;
+
+        }
+      }
+    },
     closeTab() {
-      this.showMessage = false
+      this.showMessage = false;
     },
     validateName() {
 
-      if (this.name != '' && this.name.length > 3) {
-        this.name = this.name.toUpperCase()
-        this.validName = true
+      if (this.name != "" && this.name.length > 3) {
+        this.name = this.name.toUpperCase();
+        this.validName = true;
       } else {
-        this.nameBuildingMessage = "Campo vacio o < a 4 Caracteres"
-        this.validName = false
+        this.nameBuildingMessage = "Campo vacio o < a 4 Caracteres";
+        this.validName = false;
       }
     },
     validateAddress() {
-      if (this.address != '' && this.address.length > 3) {
-        this.address = this.address.toUpperCase()
-        this.validAddress = true
+      if (this.address != "" && this.address.length > 3) {
+        this.address = this.address.toUpperCase();
+        this.validAddress = true;
       } else {
-        this.validAddress = false
-        this.addressMessage = "Campo Vacio o < a 4 caracteres"
+        this.validAddress = false;
+        this.addressMessage = "Campo Vacio o < a 4 caracteres";
       }
     },
 
     validForm() {
 
       if (this.validName && this.validAddress) {
-        this.validFields = true
+        this.validFields = true;
       } else {
-        this.validFields = false
+        this.validFields = false;
       }
     },
-    sendBuilding: async function () {
+    sendBuilding: async function() {
 
-      this.validForm()
+      this.validForm();
 
       if (this.validFields) {
 
-        await this.axios.post('/buildings/create', {
+        await this.axios.post("/buildings/create", {
           name: this.name,
           address: this.address
         })
-            .then(response => {
+          .then(response => {
 
-                  if (response.status === 201) {
+              if (response.status === 201) {
 
-                    this.message = "Edificio Agregado Correctamente"
-                    this.showMessage = true
-                    this.$refs.building.reset()
-                  }
-                }
-            )
-            .catch(error => {
-              if (error.response.status == 409) {
-                this.message = "Ya existe un registro con este Nombre"
-                this.showMessage = true
-
-              } else {
-                this.message = "Error registro no agregado"
-                this.showMessage = true
+                this.message = "Edificio Agregado Correctamente";
+                this.showMessage = true;
+                this.$refs.building.reset();
               }
+            }
+          )
+          .catch(error => {
+
+            if (error.response.status === 401) {
+              this.releaseLocation();
+
+            } else if (error.response.status == 409) {
+              this.message = "Ya existe un registro con este Nombre";
+              this.showMessage = true;
+
+            } else {
+              this.message = "Error registro no agregado";
+              this.showMessage = true;
+            }
 
 
-            })
+          });
       } else {
 
-        this.message = "Verifica los campos primero"
-        this.showMessage = true
+        this.message = "Verifica los campos primero";
+        this.showMessage = true;
 
       }
 
     }
   }
-}
+};
 </script>
 
 <style scoped>

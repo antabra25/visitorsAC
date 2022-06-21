@@ -65,68 +65,98 @@ export default {
       showMessage: false,
       message: "",
       reasonMessage: ""
-    }
+    };
 
   },
   methods: {
+
+    async releaseLocation() {
+      const user_id = localStorage.getItem("user_id");
+      try {
+        const response = await this.axios.put(`/locations/update/${user_id}`, {
+          available: true
+        });
+        if (response.status === 200) {
+          localStorage.clear();
+          this.$router.push("/");
+        }
+      } catch (error) {
+
+        if (error.response.status === 404) {
+          this.message = "Error No se Desactivo la localizacion";
+          this.showMessage = true;
+
+        }
+
+      }
+    },
     closeTab() {
-      this.showMessage = false
+      this.showMessage = false;
     },
     deleteReason() {
 
     },
     validateReason() {
       if (this.reason != "" && this.reason.length > 4) {
-        this.reason = this.reason.toUpperCase()
-        this.validReason = true
+        this.reason = this.reason.toUpperCase();
+        this.validReason = true;
       } else {
-        this.validReason = false
-        this.reasonMessage = "Campo vacio"
+        this.validReason = false;
+        this.reasonMessage = "Campo vacio";
       }
     },
-    loadReasons: async function () {
-      const URL = '/reasons/'
+    loadReasons: async function() {
+      const URL = "/reasons/";
       await this.axios.get(URL).then(
-          response => {
-            this.reasons = response.data
-          }
+        response => {
+          this.reasons = response.data;
+        }
       ).catch(error => {
-        console.log(error)
-      })
+        console.log(error);
+      });
 
     },
-    sendReason: async function () {
-      this.validateReason()
+    sendReason: async function() {
+      this.validateReason();
       if (this.validReason) {
-        const URL = '/reasons/create'
+        const URL = "/reasons/create";
         await this.axios.post(URL, {
-              name: this.reason
-            }
+            name: this.reason
+          }
         ).then(response => {
           if (response.status === 201) {
-            this.message = "Motivo Agregado Correctamente"
-            this.showMessage = true
-            this.$refs.reason.reset()
+            this.message = "Motivo Agregado Correctamente";
+            this.showMessage = true;
+            this.$refs.reason.reset();
 
           }
         }).catch(error => {
-          if (error.response.status == 404 && JSON.parse(error.response.request.responseText).detail === "Field Name Duplicate") {
-            console.log(error.response)
-            this.message = "Campo Motivo Duplicado"
-            this.showMessage = true
+
+          if (error.response.status === 401) {
+            this.releaseLocation();
+
+          } else if (error.response.status == 404 && JSON.parse(error.response.request.responseText).detail === "Field Name Duplicate") {
+            console.log(error.response);
+            this.message = "Campo Motivo Duplicado";
+            this.showMessage = true;
+          } else {
+            this.message = "Error en el servidor";
+            this.showMessage = true;
+
           }
 
-        })
+
+        });
       } else {
-        this.message = "Verifica el Formulario"
-        this.showMessage = true
+        this.message = "Verifica el Formulario";
+        this.showMessage = true;
       }
     }
   },
   mounted() {
-    this.loadReasons()
+    this.loadReasons();
   }
-}
+};
 </script>
 
 <style scoped>

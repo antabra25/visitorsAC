@@ -59,6 +59,24 @@ export default {
     }
   }
   , methods: {
+    async releaseLocation() {
+      const user_id = localStorage.getItem("user_id");
+      try {
+        const response = await this.axios.put(`/locations/update/${user_id}`, {
+          available: true
+        });
+        if (response.status === 200) {
+          localStorage.clear();
+          this.$router.push("/");
+        }
+      } catch (error) {
+
+        if (error.response.status === 404) {
+          this.message = "Error No se Desactivo la localizacion";
+          this.showMessage = true;
+        }
+      }
+    },
     closeTab() {
       this.showMessage = false
     },
@@ -111,7 +129,7 @@ export default {
           flat: this.flat
         }).then(
             response => {
-              console.log(response)
+
               if (response.status === 201) {
                 this.message = "Oficina Agregada Correctamente"
                 this.showMessage = true
@@ -120,9 +138,12 @@ export default {
             }
         ).catch(
             error => {
-              console.error("Error", error)
+              if(error.response.status === 401){
+                this.releaseLocation()
+              }else if(error.response.status > 401){
               this.message = "Error Oficina no Agregada"
               this.showMessage = true
+              }
             }
         )
       } else {

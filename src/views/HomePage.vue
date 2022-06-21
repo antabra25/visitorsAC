@@ -39,6 +39,26 @@ export default {
     this.getTime();
   },
   methods: {
+    async releaseLocation() {
+      const user_id = localStorage.getItem("user_id");
+      try {
+        const response = await this.axios.put(`/locations/update/${user_id}`, {
+          available: true
+        });
+        if (response.status === 200) {
+          localStorage.clear();
+          this.$router.push("/");
+        }
+      } catch (error) {
+
+        if (error.response.status === 404) {
+          this.message = "Error No se Desactivo la localizacion";
+          this.showMessage = true;
+
+        }
+
+      }
+    },
     getTime() {
       const time = setInterval(() => {
         this.hour = new Date().getHours();

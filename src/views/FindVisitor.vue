@@ -83,20 +83,46 @@ export default {
     };
   },
   methods: {
+    async releaseLocation() {
+      const user_id = localStorage.getItem("user_id");
+      try {
+        const response = await this.axios.put(`/locations/update/${user_id}`, {
+          available: true
+        });
+        if (response.status === 200) {
+          localStorage.clear();
+          this.$router.push("/");
+        }
+      } catch (error) {
+
+        if (error.response.status === 404) {
+          this.message = "Error No se Desactivo la localizacion";
+          this.showMessage = true;
+
+        }
+
+      }
+    },
     async findVisit() {
       if (this.search && this.picked) {
         await this.axios.get(`/visits/find/${this.search}/${this.picked}`)
           .then(
             response => {
               if (response.status === 200) {
-
                 this.visits = response.data;
-
               }
             }
           )
           .catch(
             error => {
+              if (error.response.status === 401) {
+                this.releaseLocation();
+              } else if (error.response.status === 404) {
+                this.message = "No se encontraron coincidencia";
+              } else {
+                this.message = "Error del Servidor";
+                this.showMessage = true;
+              }
 
             }
           );
@@ -115,6 +141,13 @@ export default {
         ).catch(
           error => {
 
+            if (error.response.status === 401) {
+              this.releaseLocation();
+            } else if (error.response.status === 404) {
+              this.message = "No hay registros agregados";
+              this.showMessage = true;
+            }
+
           }
         );
     },
@@ -130,9 +163,10 @@ export default {
         .catch(
           error => {
             if (error.response.status === 401) {
-
-            } else {
-
+              this.releaseLocation();
+            } else if (error.response.status === 404) {
+              this.message = "No existe elemento con el ID proporcionado";
+              this.showMessage = true;
             }
           }
         );
