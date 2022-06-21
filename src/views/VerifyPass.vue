@@ -1,7 +1,7 @@
 <template>
   <div class="main-content-wrapper">
     <h1 class="title">Verificar Visitantes</h1>
-    <info-message :is-display="showMessage">{{ message }}</info-message>
+    <info-message :is-display="showMessage" @close-tab="closeTab">{{ message }}</info-message>
     <web-cam @upload-photo="(canva)=>photo=canva"></web-cam>
     <form @submit.prevent>
       <div class="main-verify">
@@ -22,6 +22,7 @@ import EntrySmallOff from "../components/EntrySmallOff.vue";
 import WebCam from "../components/WebCam.vue";
 import InfoMessage from "../components/InfoMessage.vue";
 import BaseButton from "../components/BaseButton.vue";
+import { withScopeId } from "vue";
 
 export default {
   name: "VerifyPass",
@@ -45,6 +46,9 @@ export default {
     };
   },
   methods: {
+    closeTab() {
+      this.showMessage = false;
+    },
     async releaseLocation() {
       const user_id = localStorage.getItem("user_id");
       try {
@@ -84,10 +88,21 @@ export default {
           error => {
             if (error.response.status === 401) {
               const res = this.releaseLocation();
-            } else if (error.response.status > 401) {
-              /* Notificar error al usuario */
-              this.message = "No se logro verificar";
-              this.showMessage = true;
+            } else if (error.response.status === 404) {
+              const msg = JSON.parse(error.response.request.response).detail;
+              if (msg === "Could not read the QR") {
+                this.message = "Toma la foto nuevamente";
+                this.showMessage = true;
+              } else if (msg === "This is not valid pass") {
+                this.message = "Pase no asociado a un visitante";
+                this.showMessage = true;
+              } else if (msg === "This QR does not belong to this system") {
+                this.message = "Este QR no pertenece al Sistema";
+                this.showMessage = true;
+
+
+              }
+
             }
           }
         );

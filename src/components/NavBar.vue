@@ -60,7 +60,6 @@
 
         <div :class="isActiveUser ? 'dropdown-content':'hidden'">
           <router-link class="sub-menu-item" to="/user">REGISTRO</router-link>
-          <router-link class="sub-menu-item" to="">PERMISOS</router-link>
         </div>
 
       </div>
