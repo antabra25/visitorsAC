@@ -58,14 +58,14 @@ export default {
       validPassword: null,
       validEmail: null,
       validUserName: null,
-      usernameMessage: '',
-      emailMessage: '',
-      passwordMessage: '',
+      usernameMessage: "",
+      emailMessage: "",
+      passwordMessage: "",
       showMessage: false,
-      message: ''
+      message: ""
 
 
-    }
+    };
   },
   methods: {
     async releaseLocation() {
@@ -89,139 +89,152 @@ export default {
       }
     },
     closeTab() {
-      this.showMessage = false
+      this.showMessage = false;
     },
-    setOption: async function (value) {
+    setOption: async function(value) {
 
       if (value) {
-        this.rol = value.role_id
+        this.rol = value.role_id;
       }
     },
-    loadRoles: async function () {
-      const URL = '/roles/';
+    loadRoles: async function() {
+      const URL = "/roles/";
       await this.axios.get(URL)
-          .then(response => {
-            this.listRole = response.data
-          })
-          .catch(
-              (error) => {
-                console.log("Error", error)
-              }
-          )
+        .then(response => {
+          this.listRole = response.data;
+        })
+        .catch(
+          (error) => {
+            if (error.response.status === 401) {
+              this.releaseLocation();
+            } else {
+              this.message = "Error no se recupero los roles";
+              this.showMessage = true;
+            }
+          }
+        );
 
     },
-    checkEmail: async function () {
+    checkEmail: async function() {
       if (
-          this.email != null &&
-          this.email.length > 10 &&
-          this.email.includes("@") &&
-          this.email.includes(".") &&
-          !(this.email.includes(" "))
+        this.email != null &&
+        this.email.length > 10 &&
+        this.email.includes("@") &&
+        this.email.includes(".") &&
+        !(this.email.includes(" "))
       ) {
         const URL = `/users/verify/${this.email}`;
         await this.axios.get(URL)
-            .then(
-                response => {
-                  if (response.status == 200) {
-                    console.log(response.data)
-                    this.validEmail = response.data.available
-                    this.emailMessage = "Correo registrado en el sistema"
-                  }
-                })
-            .catch(
-                error => {
-                  console.log("Error", error)
-                }
-            )
+          .then(
+            response => {
+              if (response.status == 200) {
+                console.log(response.data);
+                this.validEmail = response.data.available;
+                this.emailMessage = "Correo registrado en el sistema";
+              }
+            })
+          .catch(
+            error => {
+              if (error.response.status === 401) {
+                this.releaseLocation();
+              } else {
+                this.message = "Error en la verificacion";
+                this.showMessage = true;
+              }
+            }
+          );
       } else {
-        this.emailMessage = "Formato del correo no valido"
-        this.validEmail = false
+        this.emailMessage = "Formato del correo no valido";
+        this.validEmail = false;
 
       }
     },
-    checkUserName: async function () {
+    checkUserName: async function() {
 
       if (this.username != null && this.username.length > 6) {
 
         const URL = `/users/check/${this.username}`;
 
         await this.axios.get(URL)
-            .then(
-                response => {
-                  this.validUserName = response.data.available
-                  this.usernameMessage = "Usuario no disponible"
-                }
-            )
-            .catch(
-                error => {
-                  console.log(
-                      "Error", error
-                  )
-                }
-            )
+          .then(
+            response => {
+              this.validUserName = response.data.available;
+              this.usernameMessage = "Usuario no disponible";
+            }
+          )
+          .catch(
+            error => {
+              if (error.response.status === 401) {
+                this.releaseLocation();
+              }
+            }
+          );
       } else {
-        this.validUserName = false
-        this.usernameMessage = "Campo vacio o menor a 7 caracteres"
+        this.validUserName = false;
+        this.usernameMessage = "Campo vacio o menor a 7 caracteres";
 
       }
     },
-    validatePassword: async function () {
+    validatePassword: async function() {
 
       if (this.password != null && this.checkPassword != null) {
 
         if (this.password === this.checkPassword && this.password.length > 7) {
-          this.validPassword = true
+          this.validPassword = true;
 
         } else {
-          this.validPassword = false
-          this.passwordMessage = "Contraseñas distintas o menor a 8 caracteres"
+          this.validPassword = false;
+          this.passwordMessage = "Contraseñas distintas o menor a 8 caracteres";
 
         }
       } else {
 
-        this.passwordMessage = "Campo Contraseña vacio"
-        this.validPassword = false
+        this.passwordMessage = "Campo Contraseña vacio";
+        this.validPassword = false;
       }
 
 
     },
-    sendUser: async function () {
+    sendUser: async function() {
 
       if (this.validEmail && this.validUserName && this.validPassword && this.rol != null) {
 
-        const URL = '/users/create';
+        const URL = "/users/create";
         await this.axios.post(URL, {
           username: this.username,
           email: this.email,
           password: this.password,
           role_id: this.rol
         }).then(response => {
-          console.log(response.data)
+          console.log(response.data);
           if (response.status === 201) {
-
-            this.message = "Usuario Agregado Correctamente"
-            this.showMessage = true
-            this.$refs.user.reset()
+            this.message = "Usuario Agregado Correctamente";
+            this.showMessage = true;
+            this.$refs.user.reset();
           }
         }).catch(
-            error => {
-              console.error("Error", error)
-              this.message = "Error Usuario no Agregado"
-              this.showMessage = true
+          error => {
+            if (error.response.status === 401) {
+              this.releaseLocation();
+            } else if (error.response.status > 401) {
+              this.message = "Error Usuario no Agregado";
+              this.showMessage = true;
+
             }
-        )
+          }
+        );
       } else {
 
-        this.message = "Revisa el Formulario"
-        this.showMessage = true
+        this.message = "Revisa el Formulario";
+        this.showMessage = true;
 
       }
     }
   },
   mounted() {
-    this.loadRoles()
+    this.loadRoles();
   }
-}
+};
 </script>
 
 <style scoped>

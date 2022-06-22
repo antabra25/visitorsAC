@@ -1,10 +1,19 @@
 <template>
 
   <div class="main-content-wrapper">
+    <info-message :is-display="showMessage">{{message}}</info-message>
     <h1 class="title-local">Visitantes Activos</h1>
-    <search-input name="Buscar"></search-input>
+    <search-input name="Buscar" class="ml-[78px] mt-8"></search-input>
     <div class="visitor-layout">
-
+      <visitor-card
+        v-for="visitor in visitors"
+        :name="visitor.name"
+        :lastname="visitor.lastname"
+        :ci="visitor.ci"
+        :office="visitor.office"
+        :building="visitor.building"
+        :photo="visitor.photo">
+      </visitor-card>
     </div>
   </div>
 
@@ -13,14 +22,64 @@
 <script>
 import SearchInput from "../components/SearchInput.vue";
 import VisitorCard from "../components/VisitorCard.vue";
+import InfoMessage from "../components/InfoMessage.vue";
 
 export default {
   name: "ActiveVisitor",
   components: {
     SearchInput,
-    VisitorCard
-  }
+    VisitorCard,
+    InfoMessage
+  },
+  data() {
+    return {
+      visitors: null,
+      message:'',
+      showMessage:false,
+    };
+  },
+  methods: {
+    closeTab() {
+      this.showMessage = false;
+    },
+    async releaseLocation() {
+      const user_id = localStorage.getItem("user_id");
+      try {
+        const response = await this.axios.put(`/locations/update/${user_id}`, {
+          available: true
+        });
+        if (response.status === 200) {
+          localStorage.clear();
+          this.$router.push("/");
+        }
+      } catch (error) {
 
+        if (error.response.status === 404) {
+          this.message = "Error No se Desactivo la localizacion";
+          this.showMessage = true;
+        }
+
+      }
+    },
+    async loadActiveVisitors() {
+      try {
+        const response = await this.axios.get("/visits/active/visitors");
+        if (response.status === 200) {
+          this.visitors = response.data;
+        }
+      } catch (error) {
+        if (error.response.status === 401) {
+          this.releaseLocation();
+        } else if (error.response.status > 401) {
+
+        }
+
+      }
+    }
+  },
+  mounted() {
+    this.loadActiveVisitors();
+  }
 
 };
 </script>

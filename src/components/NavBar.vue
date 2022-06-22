@@ -3,24 +3,19 @@
     <nav class="navbar shadow-md">
 
       <div class="menu-item">
-
         <router-link to="/home">
           <img src="../assets/svg/home.svg" alt="">
         </router-link>
       </div>
 
       <div class="dropdown menu-item ">
-
         <button class="dropdown-btn" @click="setActive(1)">
           VISITANTE
           <img src="../assets/svg/barret.svg" alt="">
         </button>
-
         <div :class="isActiveVisitor ? 'dropdown-content':'hidden'">
-
           <router-link class="sub-menu-item " to="/visitor">REGISTRAR</router-link>
           <router-link class="sub-menu-item" to="/visitor/find">BUSCAR</router-link>
-
         </div>
       </div>
 
@@ -65,9 +60,9 @@
       </div>
 
       <div class="menu-item" id="logout-btn">
-        <router-link to="/">
-          <img src="../assets/svg/logout.svg" alt="">
-        </router-link>
+        <button @click="releaseLocation">
+          <img src="../assets/svg/logout.svg">
+        </button>
       </div>
     </nav>
   </header>
@@ -81,11 +76,32 @@ export default {
     return {
       isActiveVisitor: false,
       isActiveAdmin: false,
-      isActiveUser: false,
-    }
+      isActiveUser: false
+    };
 
   },
   methods: {
+    async releaseLocation() {
+      const user_id = localStorage.getItem("user_id");
+      try {
+        const response = await this.axios.put(`/locations/update/${user_id}`, {
+          available: true
+        });
+        if (response.status === 200) {
+          localStorage.clear();
+          this.$router.push("/");
+        }
+      } catch (error) {
+
+        if (error.response.status === 404) {
+          this.message = "Error No se Desactivo la localizacion";
+          this.showMessage = true;
+
+        }
+
+      }
+    },
+
     setActive(btn) {
       if (btn === 1) {
         this.isActiveVisitor = !this.isActiveVisitor;
@@ -96,7 +112,7 @@ export default {
       }
     }
   }
-}
+};
 </script>
 
 <style scoped>

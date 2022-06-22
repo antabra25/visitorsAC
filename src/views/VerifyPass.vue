@@ -87,7 +87,7 @@ export default {
         ).catch(
           error => {
             if (error.response.status === 401) {
-              const res = this.releaseLocation();
+              this.releaseLocation();
             } else if (error.response.status === 404) {
               const msg = JSON.parse(error.response.request.response).detail;
               if (msg === "Could not read the QR") {
