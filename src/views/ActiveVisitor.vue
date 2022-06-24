@@ -7,11 +7,13 @@
     <div class="visitor-layout">
       <visitor-card
         v-for="visitor in visitors"
+        :key="visitor.ci"
         :name="visitor.name"
         :lastname="visitor.lastname"
         :ci="visitor.ci"
         :office="visitor.office"
         :building="visitor.building"
+        :flat="visitor.flat"
         :photo="visitor.photo">
       </visitor-card>
     </div>
@@ -66,6 +68,7 @@ export default {
         const response = await this.axios.get("/visits/active/visitors");
         if (response.status === 200) {
           this.visitors = response.data;
+          console.log(this.visitors)
         }
       } catch (error) {
         if (error.response.status === 401) {

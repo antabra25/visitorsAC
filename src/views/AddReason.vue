@@ -23,7 +23,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr v-for="reason in reasons">
+      <tr v-for="reason in reasons" :key="reason.reason_id">
         <td>{{ reason.reason_id }}</td>
         <td>{{ reason.name }}</td>
         <td>

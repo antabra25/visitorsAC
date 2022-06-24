@@ -1,11 +1,11 @@
 <template>
   <div class="webcam">
-    <video id="video" ref="video" height="320" width="240" autoplay></video>
+    <video id="video" ref="video" height="320" width="320" autoplay></video>
     <div class="controls flex flex-row gap-x-2.5 justify-center mt-4">
       <small-button @click="capture">Capturar</small-button>
       <small-button @click="resume">Reiniciar</small-button>
     </div>
-    <canvas id="canvas" ref="canvas" height="320" width="240"></canvas>
+    <canvas id="canvas" ref="canvas" height="320" width="320"></canvas>
   </div>
 
 </template>

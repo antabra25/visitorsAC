@@ -10,7 +10,7 @@
           <h2>{{name}} {{lastname}}</h2>
           <h2>{{ci}}</h2>
           <h2>Edif:{{building}}</h2>
-          <h2>Oficina:{{office}}</h2>
+          <h2>Oficina: {{office}}</h2>
           <h2>Piso: {{flat}}</h2>
         </div>
         <div class="controls-btn items-end">
@@ -29,7 +29,7 @@ import DeleteButton from "./DeleteButton.vue";
 
 export default {
   name: "VisitorCard",
-  props:['name','lastname','ci','office','building','flat','photo'],
+  props:['name','lastname','ci','office','building','flat','photo','key'],
   components: {
     DeleteButton,
     EditButton
