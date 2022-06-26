@@ -1,5 +1,5 @@
 <template>
-  <div class="lg:main-content-wrapper 2xl:mb-[300px]">
+  <div class="lg:main-content-wrapper xl:mb-14 2xl:mb-[300px]">
     <h1 class="title">Edificio</h1>
     <info-message :is-display="showMessage" @close-tab="closeTab">{{ message }}</info-message>
 

@@ -32,7 +32,7 @@
           </button>
         </td>
         <td>
-          <button @click="deleteReason"><img src="../assets/svg/delete-circle.svg" alt=""></button>
+          <button @click="deleteReason(reason.reason_id)"><img src="../assets/svg/delete-circle.svg" alt=""></button>
         </td>
       </tr>
       </tbody>
@@ -93,7 +93,23 @@ export default {
     closeTab() {
       this.showMessage = false;
     },
-    deleteReason() {
+    async deleteReason(id) {
+      try {
+        const response = await this.axios.delete(`/reasons/delete/${id}`)
+        if (response.status === 204) {
+          this.message = "Elemento eliminado"
+          this.showMessage = true
+        }
+
+      } catch (error) {
+        if (error.response.status === 404) {
+          this.message = "Error.No existe el registro con ese nombre"
+          this.showMessage = true
+        } else if (error.response.status === 401) {
+          this.releaseLocation()
+        }
+      }
+
 
     },
     validateReason() {
@@ -105,24 +121,24 @@ export default {
         this.reasonMessage = "Campo vacio";
       }
     },
-    loadReasons: async function() {
+    loadReasons: async function () {
       const URL = "/reasons/";
       await this.axios.get(URL).then(
-        response => {
-          this.reasons = response.data;
-        }
+          response => {
+            this.reasons = response.data;
+          }
       ).catch(error => {
         console.log(error);
       });
 
     },
-    sendReason: async function() {
+    sendReason: async function () {
       this.validateReason();
       if (this.validReason) {
         const URL = "/reasons/create";
         await this.axios.post(URL, {
-            name: this.reason
-          }
+              name: this.reason
+            }
         ).then(response => {
           if (response.status === 201) {
             this.message = "Motivo Agregado Correctamente";

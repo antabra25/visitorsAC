@@ -1,6 +1,6 @@
 <template>
 
-  <div class="main-content-wrapper">
+  <div class="xl:main-content-wrapper xl:mb-48 2xl:mb-52" >
     <h1 class="title">Visitas</h1>
     <info-message :is-display="showMessage">{{ message }}</info-message>
     <div class="main-box ">
@@ -35,7 +35,7 @@
         <th>Eliminar</th>
         </thead>
         <tbody>
-        <tr v-for="visit in visits">
+        <tr v-for="visit in visits" :key="visit.ci">
           <td>{{ visit.visit_id }}</td>
           <td>{{ visit.ci }}</td>
           <td>{{ visit.name }}</td>
