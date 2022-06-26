@@ -4,9 +4,8 @@
     <section class="info-row">
 
       <div class="info-display relative">
-        <h2 class="info-item text-4xl">Visitantes Activos : {{ active }}</h2>
-        <h3 class="info-item text-lg">Total hoy : {{ amount }}</h3>
-        <h3 class="info-item text-lg">Cerradas :{{ close }}</h3>
+        <h2 class="info-item text-4xl">Visitantes Activos : {{ activated }}</h2>
+        <h3 class="info-item text-lg">Cerradas : {{ closed }}</h3>
 
         <div class="box-time absolute top-[262px] left-[451px] flex flex-row justify-center items-center">
           <img src="../assets/svg/watch.svg" alt="svg watch" class="icon-watch">
@@ -28,8 +27,8 @@ export default {
   data() {
     return {
       amount: null,
-      close: null,
-      active: null,
+      closed: null,
+      activated: null,
       hour: null,
       minutes: null,
       seconds: null,
@@ -39,6 +38,19 @@ export default {
     this.getTime();
   },
   methods: {
+    async getResume() {
+      try {
+        const response = await this.axios.get('/visits/resume/');
+        if (response.status === 200) {
+
+          this.closed = response.data.closed;
+          this.activated = response.data.activated;
+        }
+
+      } catch (error) {
+        console.log(error);
+      }
+    },
     async releaseLocation() {
       const user_id = localStorage.getItem("user_id");
       try {
@@ -68,6 +80,9 @@ export default {
       }, 1000);
 
     }
+  },
+  mounted() {
+    this.getResume()
   }
 }
 </script>

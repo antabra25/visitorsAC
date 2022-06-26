@@ -99,11 +99,12 @@ export default {
         if (response.status === 204) {
           this.message = "Elemento eliminado"
           this.showMessage = true
+          await this.loadReasons()
         }
 
       } catch (error) {
         if (error.response.status === 404) {
-          this.message = "Error.No existe el registro con ese nombre"
+          this.message = "Error.No existe registro con ese nombre"
           this.showMessage = true
         } else if (error.response.status === 401) {
           this.releaseLocation()
@@ -121,9 +122,9 @@ export default {
         this.reasonMessage = "Campo vacio";
       }
     },
-    loadReasons: async function () {
-      const URL = "/reasons/";
-      await this.axios.get(URL).then(
+    async loadReasons() {
+
+      await this.axios.get("/reasons/").then(
           response => {
             this.reasons = response.data;
           }
@@ -135,25 +136,23 @@ export default {
     sendReason: async function () {
       this.validateReason();
       if (this.validReason) {
-        const URL = "/reasons/create";
-        await this.axios.post(URL, {
-              name: this.reason
-            }
-        ).then(response => {
+        try {
+          const response = await this.axios.post("/reasons/create", {
+            name: this.reason
+          });
           if (response.status === 201) {
-            this.message = "Motivo Agregado Correctamente";
-            this.showMessage = true;
-            this.$refs.reason.reset();
-
+            this.message = "Motivo registrado"
+            this.showMessage = true
+             this.$refs.reason.reset();
+            await this.loadReasons();
           }
-        }).catch(error => {
+        } catch (error) {
 
           if (error.response.status === 401) {
-            this.releaseLocation();
+            await this.releaseLocation();
 
           } else if (error.response.status == 404 && JSON.parse(error.response.request.responseText).detail === "Field Name Duplicate") {
-            console.log(error.response);
-            this.message = "Campo Motivo Duplicado";
+            this.message = "Error.El motivo ya existe"
             this.showMessage = true;
           } else {
             this.message = "Error en el servidor";
@@ -161,8 +160,8 @@ export default {
 
           }
 
+        }
 
-        });
       } else {
         this.message = "Verifica el Formulario";
         this.showMessage = true;

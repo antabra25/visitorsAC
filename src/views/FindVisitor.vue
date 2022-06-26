@@ -83,6 +83,9 @@ export default {
     };
   },
   methods: {
+    closeTab(){
+      this.showMessage = false;
+    },
     async releaseLocation() {
       const user_id = localStorage.getItem("user_id");
       try {
@@ -157,6 +160,7 @@ export default {
           if (response.status === 204) {
             this.message = "Elemento  eliminado";
             this.showMessage = true;
+            this.loadVisits();
           }
 
         })
@@ -173,9 +177,7 @@ export default {
     }
   },
   mounted() {
-
     this.loadVisits();
-
   }
 };
 </script>
