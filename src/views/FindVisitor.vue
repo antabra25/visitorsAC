@@ -1,6 +1,6 @@
 <template>
 
-  <div class="xl:main-content-wrapper xl:mb-48 2xl:mb-52" >
+  <div class="xl:main-content-wrapper xl:mb-48 2xl:mb-[500px]" >
     <h1 class="title">Visitas</h1>
     <info-message :is-display="showMessage">{{ message }}</info-message>
     <div class="main-box ">

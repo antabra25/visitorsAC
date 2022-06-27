@@ -1,5 +1,5 @@
 <template>
-  <div class="main-content-wrapper">
+  <div class="lg:main-content-wrapper xl:mb-40 2xl:mb-96">
     <h1 class="title">Motivo</h1>
     <info-message :is-display="showMessage" @close-tab="closeTab">{{ message }}</info-message>
     <form @submit.prevent="sendReason" ref="reason">

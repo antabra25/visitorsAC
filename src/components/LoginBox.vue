@@ -75,11 +75,17 @@ export default {
               if (response.status === 200) {
                 this.axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.access_token;
                 localStorage.setItem('token', response.data.access_token);
-                localStorage.setItem('user_id',response.data.user_id)
-                localStorage.setItem('role_id',response.data.role_id)
-                this.$router.push('/location');
-              }
+                localStorage.setItem('user_id', response.data.user_id)
+                localStorage.setItem('role_id', response.data.role_id)
+                const roleId = localStorage.getItem('role_id')
+                console.log(roleId,typeof roleId)
+                if (roleId === '1' || roleId === '2') {
+                  this.$router.push("/home")
+                }else {
+                   this.$router.push('/location');
+                }
 
+              }
             }).catch(error => {
               if (error.response.status === 403) {
                 this.passwordMessage = "Credenciales Invalidas"

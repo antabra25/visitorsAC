@@ -1,6 +1,6 @@
 <template>
 
-  <div class="xl:main-content-wrapper xl:mb-80 xl:mt-32">
+  <div class="xl:main-content-wrapper xl:mb-80 xl:mt-32 2xl:mb-[500px]" >
     <info-message :is-display="showMessage">{{message}}</info-message>
     <h1 class="title-local">Visitantes Activos</h1>
     <search-input name="Buscar" class="ml-[78px] mt-8"></search-input>

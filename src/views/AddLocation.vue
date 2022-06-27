@@ -48,6 +48,7 @@ export default {
   methods: {
     async releaseLocation() {
       const user_id = localStorage.getItem("user_id");
+      const role_id = localStorage.getItem("role_id")
       try {
         const response = await this.axios.put(`/locations/update/${user_id}`, {
           available: true
