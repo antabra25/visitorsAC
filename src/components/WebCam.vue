@@ -26,29 +26,30 @@ export default {
   , methods: {
 
     mediaSetup() {
+      // Get access to the camera!
       if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         navigator.mediaDevices
           .getUserMedia({
             video: true
           })
-          .then((stream) => {
-            this.$refs.video.srcObject = stream;
+          .then((stream) => {// Create a video element
+            this.$refs.video.srcObject = stream; // set the source of the video element to the stream
             this.$refs.video.play();
           });
       }
     },
     capture() {
-      this.pause();
-      let ctx = this.$refs.canvas.getContext("2d");
-      ctx.drawImage(this.$refs.video, 0, 0, 240, 320);
-      const image = this.$refs.canvas.toDataURL();
-      this.$emit("uploadPhoto", image);
+      this.pause(); // stop the video
+      let ctx = this.$refs.canvas.getContext("2d"); // get the context of the canvas
+      ctx.drawImage(this.$refs.video, 0, 0, 320, 320);//320, 320
+      const image = this.$refs.canvas.toDataURL(); // "image/png"
+      this.$emit("uploadPhoto", image); // emit the image to the parent component
 
     },
-    pause() {
+    pause() { // stop the video
       this.$refs.video.pause();
     },
-    resume() {
+    resume() { // play the video
       this.$refs.video.play();
     }
 

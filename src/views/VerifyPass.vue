@@ -5,12 +5,12 @@
     <web-cam @upload-photo="(canva)=>photo=canva"></web-cam>
     <form @submit.prevent>
       <div class="main-verify">
-        <entry-small-off name="Nro Carnet" input-type="number" v-model="passId"></entry-small-off>
-        <entry-small-off name="C.I" input-type="number" disabled v-model="ci"></entry-small-off>
-        <entry-small-off name="Nombre" input-type="text" v-model="name"></entry-small-off>
-        <entry-small-off name="Apellido" input-type="text" v-model="lastName"></entry-small-off>
-        <entry-small-off name="Piso" input-type="number" v-model="flat"></entry-small-off>
-        <entry-small-off name="Oficina" input-type="text" v-model="office"></entry-small-off>
+        <entry-small-off name="Nro Carnet" input-type="number" v-model.trim="passId"></entry-small-off>
+        <entry-small-off name="C.I" input-type="number" disabled v-model.trim="ci"></entry-small-off>
+        <entry-small-off name="Nombre" input-type="text" v-model.trim="name"></entry-small-off>
+        <entry-small-off name="Apellido" input-type="text" v-model.trim="lastName"></entry-small-off>
+        <entry-small-off name="Piso" input-type="number" v-model.trim="flat"></entry-small-off>
+        <entry-small-off name="Oficina" input-type="text" v-model.trim="office"></entry-small-off>
         <base-button class="mt-4" @click="checkPass">Verificar</base-button>
       </div>
     </form>

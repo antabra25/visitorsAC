@@ -31,8 +31,6 @@ export default {
       passwordMessage: "",
       validPassword: null,
       validUserName: null,
-
-
     }
   },
   methods: {
