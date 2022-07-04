@@ -1,9 +1,9 @@
 <template>
   <div class="main-content-wrapper">
-    <h1 class="mt-[60px] font-subtitle font-medium text-black text-2xl pb-[125px] text-center">Usuario</h1>
+    <h1 class="mt-[60px] font-subtitle font-medium text-black text-2xl pb-[125px] pt-24 text-center">Usuario</h1>
     <web-cam @upload-photo="(canva)=>photo=canva"></web-cam>
     <info-message :is-display="showMessage" @close-tab="closeTab">{{ message }}</info-message>
-    <form @submit.prevent="sendUser" class="form" ref="user">
+    <form @submit.prevent="sendUser" class="form mt-6" ref="user">
       <entry-small name="Correo" input-type="email" v-model.trim="email" @focusout="checkEmail">
         <template #default>
           <small v-if="validEmail===false" class="small">
