@@ -91,7 +91,7 @@ export default {
           if (error.response.status === 401) {
             this.releaseLocation();
           } else if (error.response.status === 404) {
-            this.message = "No existen datos que cargar en Edificio";
+            this.message = "No hay Edificios Registrados";
             this.showMessage = true;
           }
         });

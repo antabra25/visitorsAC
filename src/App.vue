@@ -1,6 +1,6 @@
 <template>
   <top-banner></top-banner>
-  <nav-bar v-if="$route.path !=='/' && $route.path!='/location'"></nav-bar>
+  <nav-bar v-if="$route.path !=='/' && $route.path!='/location' "></nav-bar>
   <main class="bg-dirtywhite min-h-full">
     <router-view></router-view>
   </main>

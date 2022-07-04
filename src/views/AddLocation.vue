@@ -139,7 +139,7 @@ export default {
             this.listBuildings = response.data;
           }).catch(error => {
             if (error.response.status === 404) {
-              this.message = "No existen datos que cargar en Edificio"
+              this.message = "No hay Edificios Registrados"
               this.showMessage = true
             }
           });

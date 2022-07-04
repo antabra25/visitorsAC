@@ -13,6 +13,7 @@ import TheGenerator from "../views/TheGenerator.vue";
 import AddBuilding from "../views/AddBuilding.vue";
 import AddLocation from "../views/AddLocation.vue";
 import SelectLocation from "../views/SelectLocation.vue";
+import NotFound from "../views/NotFound.vue";
 
 const routes = [
     {path: "/", component: Auth},
@@ -28,7 +29,8 @@ const routes = [
     {path: "/generator", component: TheGenerator},
     {path: "/building", component: AddBuilding},
     {path: "/coordinate", component: AddLocation},
-    {path: "/location",component: SelectLocation}
+    {path: "/location", component: SelectLocation},
+    {path: "/:notFound(.*)", component: NotFound}
 ];
 
 const router = createRouter({
