@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import EntryLong from "../components/EntryLong.vue";
+
 import EntrySelect from "../components/EntrySelect.vue";
 import EntrySmall from "../components/EntrySmall.vue";
 import BaseButton from "../components/BaseButton.vue";
@@ -25,7 +25,6 @@ import InfoMessage from "../components/InfoMessage.vue";
 export default {
   name: "TheReport",
   components: {
-    EntryLong,
     EntrySelect,
     EntrySmall,
     BaseButton,
@@ -51,9 +50,11 @@ export default {
     setOption: async function (value, name) {
       console.log(value, name)
       if (name === "Edificio") {
+        console.log("Edificio", value.building_id)
         this.building = value.building_id;
         await this.loadOffices(this.building);
       } else if (name === "Oficina") {
+        console.log("Oficina", value.office_id)
         this.office = value.office_id;
 
       }
@@ -99,6 +100,7 @@ export default {
           .then(
               response => {
                 this.offices = response.data;
+                console.log(this.offices)
               }
           ).catch(
               error => {
@@ -115,24 +117,24 @@ export default {
               }
           );
     },
-    async generateReport(){
-      try{
-        const response = await this.axios.post("/visits/report",{
+    async generateReport() {
+      try {
+        const response = await this.axios.post("/visits/report", {
           since: this.since,
           until: this.until,
           office_id: this.office,
           building_id: this.building
 
         })
-        if(response.status === 200){
+        if (response.status === 200) {
 
         }
-      }catch (error){
-        if(error.response.status === 401){
+      } catch (error) {
+        if (error.response.status === 401) {
 
-        }else if (error.response.status === 404){
+        } else if (error.response.status === 404) {
 
-        }else {
+        } else {
 
         }
       }
