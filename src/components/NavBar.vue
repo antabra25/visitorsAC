@@ -8,7 +8,7 @@
         </router-link>
       </div>
 
-      <div class="dropdown menu-item ">
+      <div class="dropdown menu-item " v-if="currentRole === '1' || currentRole==='3' || currentRole==='2'">
         <button class="dropdown-btn" @click="setActive(1)">
           VISITANTE
           <img src="../assets/svg/barret.svg" alt="">
@@ -31,7 +31,7 @@
         </button>
       </div>
 
-      <div class="dropdown menu-item">
+      <div class="dropdown menu-item"  v-if="currentRole === '1'|| currentRole ==='2'">
         <button class="dropdown-btn" @click="setActive(2)">
           ADMINISTRAR
           <img src="../assets/svg/barret.svg" alt="">
@@ -46,7 +46,7 @@
         </div>
       </div>
 
-      <div class="dropdown menu-item">
+      <div class="dropdown menu-item" v-if="currentRole === '1'|| currentRole ==='2'">
 
         <button class="dropdown-btn" @click="setActive(3)">
           USUARIO
@@ -59,7 +59,7 @@
 
       </div>
 
-      <div class="menu-item" id="logout-btn">
+      <div  id="logout-btn">
         <button @click="releaseLocation">
           <img src="../assets/svg/logout.svg">
         </button>
@@ -76,7 +76,8 @@ export default {
     return {
       isActiveVisitor: false,
       isActiveAdmin: false,
-      isActiveUser: false
+      isActiveUser: false,
+      currentRole: localStorage.getItem("role_id")
     };
 
   },
@@ -161,7 +162,7 @@ nav a {
 
 #logout-btn {
 
-  margin-left: 55%;
+  @apply ml-auto
 }
 
 </style>

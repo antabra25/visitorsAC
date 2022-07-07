@@ -23,8 +23,8 @@ export default {
 
 .info-tab {
   position: fixed;
-  top: 160px;
-  left: 90px;
+  top: 165px;
+  left: 75%;
   box-shadow: 0px 4px 4px 0px #00000040;;
   border: 1px solid white;
   border-radius: 5px;
