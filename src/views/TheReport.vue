@@ -48,13 +48,10 @@ export default {
       this.showMessage = false
     },
     setOption: async function (value, name) {
-      console.log(value, name)
       if (name === "Edificio") {
-        console.log("Edificio", value.building_id)
         this.building = value.building_id;
         await this.loadOffices(this.building);
       } else if (name === "Oficina") {
-        console.log("Oficina", value.office_id)
         this.office = value.office_id;
 
       }
@@ -100,7 +97,6 @@ export default {
           .then(
               response => {
                 this.offices = response.data;
-                console.log(this.offices)
               }
           ).catch(
               error => {
@@ -117,6 +113,27 @@ export default {
               }
           );
     },
+    async getReport(id) {
+      try {
+        const response = await this.axios.get(`/visits/report/${id}`)
+        if (response.status === 200) {
+          console.log(response.data)
+          window.open(response.data.url, "Reporte")
+          this.message = "Reporte Generado Correctamente"
+          this.showMessage = true
+        }
+      } catch (error) {
+        const status = error.response.status
+        if (status === 404) {
+
+        } else if (status === 401) {
+          await this.releaseLocation()
+
+        }
+
+      }
+
+    },
     async generateReport() {
       try {
         const response = await this.axios.post("/visits/report", {
@@ -126,14 +143,16 @@ export default {
           building_id: this.building
 
         })
-        if (response.status === 200) {
-
+        if (response.status === 201) {
+          const id = response.data.report_id
+          await this.getReport(id)
         }
       } catch (error) {
         if (error.response.status === 401) {
-
+          await this.releaseLocation()
         } else if (error.response.status === 404) {
-
+          this.message = "No se encontraron coincidencias"
+          this.showMessage = true
         } else {
 
         }
