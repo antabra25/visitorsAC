@@ -21,7 +21,7 @@ import {computed} from "vue";
 export default {
   data() {
     return {
-      logoName: 'MPPEFC',
+      logoName: 'MPPEFCE',
       brandName: 'Minsiterio del Poder Popular de Economía, Finanzas y Comercio Exterior',
       office: 'Oficina de Seguridad y Proteccion Integral',
       projectName: 'Control Acceso Visitantes',
