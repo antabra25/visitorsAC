@@ -1,5 +1,5 @@
 <template>
-  <div class="lg:main-content-wrapper xl:mb-14 2xl:mb-[300px]">
+  <div class="main-content-wrapper">
     <h1 class="title">Edificio</h1>
     <info-message :is-display="showMessage" @close-tab="closeTab">{{ message }}</info-message>
 
@@ -56,9 +56,8 @@ export default {
   },
   methods: {
     async releaseLocation() {
-      const user_id = localStorage.getItem("user_id");
       try {
-        const response = await this.axios.put(`/locations/update/${user_id}`, {
+        const response = await this.axios.put('/locations/update/', {
           available: true
         });
         if (response.status === 200) {

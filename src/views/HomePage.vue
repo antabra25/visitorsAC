@@ -1,5 +1,5 @@
 <template>
-  <div class=" main-content-wrapper border-box">
+  <div class="main-content-wrapper border-box">
     <h1 class="title my-[52px] text-center">Control de Acceso </h1>
     <section class="info-row">
 
@@ -40,21 +40,18 @@ export default {
   methods: {
     async getResume() {
       try {
-        const response = await this.axios.get('/visits/resume/');
+        const response = await this.axios.get('/home/resume/');
         if (response.status === 200) {
-
           this.closed = response.data.closed;
           this.activated = response.data.activated;
         }
-
       } catch (error) {
         console.log(error);
       }
     },
     async releaseLocation() {
-      const user_id = localStorage.getItem("user_id");
       try {
-        const response = await this.axios.put(`/locations/update/${user_id}`, {
+        const response = await this.axios.put('/locations/update/', {
           available: true
         });
         if (response.status === 200) {
@@ -62,13 +59,10 @@ export default {
           this.$router.push("/");
         }
       } catch (error) {
-
         if (error.response.status === 404) {
           this.message = "Error No se Desactivo la localizacion";
           this.showMessage = true;
-
         }
-
       }
     },
     getTime() {

@@ -1,5 +1,5 @@
 <template>
-  <div class="xl:main-content-wrapper md:main-content-wrapper md:mb-[150px] 2xl:mb-[320px]">
+  <div class="main-content-wrapper">
     <h1 class="title">Registro de Coordenadas</h1>
     <info-message :is-display="showMessage" @close-tab="closeTab">{{ message }}</info-message>
     <form @submit.prevent="sendLocation" class="form">
@@ -47,10 +47,8 @@ export default {
   },
   methods: {
     async releaseLocation() {
-      const user_id = localStorage.getItem("user_id");
-      const role_id = localStorage.getItem("role_id")
       try {
-        const response = await this.axios.put(`/locations/update/${user_id}`, {
+        const response = await this.axios.put('/locations/update/', {
           available: true
         });
         if (response.status === 200) {
@@ -78,30 +76,22 @@ export default {
       }
     },
     validateFloor() {
-
-
       const floors = ['S', 'PB', 'MZ', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11']
-
       if (this.floor != null && floors.find(floor => floor == this.floor.toUpperCase())) {
         this.validFloor = true
         this.floor = this.floor.toUpperCase()
-
       } else {
         this.validFloor = false
         this.floorMessage = "Piso seleccionado no existe"
       }
-
-
     },
     validateBuilding() {
-
       if (this.building != null) {
         this.validBuilding = true
       } else {
         this.validBuilding = false
 
       }
-
     },
     sendLocation: async function () {
       this.validateBuilding()
@@ -120,7 +110,6 @@ export default {
             this.message = "Error coordenada ya registrada"
             this.showMessage = true
 
-
           } else {
             this.message = "Error Coordenada no Agregada"
             this.showMessage = true
@@ -130,7 +119,6 @@ export default {
         this.message = "Revisa el formulario"
         this.showMessage = true
       }
-
     },
     loadBuildings: async function () {
       const URL = "/buildings/";

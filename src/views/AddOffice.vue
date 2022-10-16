@@ -60,9 +60,9 @@ export default {
   }
   , methods: {
     async releaseLocation() {
-      const user_id = localStorage.getItem("user_id");
+
       try {
-        const response = await this.axios.put(`/locations/update/${user_id}`, {
+        const response = await this.axios.put('/locations/update/', {
           available: true
         });
         if (response.status === 200) {

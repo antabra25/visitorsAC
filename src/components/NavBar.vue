@@ -83,9 +83,8 @@ export default {
   },
   methods: {
     async releaseLocation() {
-      const user_id = localStorage.getItem("user_id");
       try {
-        const response = await this.axios.put(`/locations/update/${user_id}`, {
+        const response = await this.axios.put('/locations/update/', {
           available: true
         });
         if (response.status === 200) {
@@ -93,16 +92,12 @@ export default {
           this.$router.push("/");
         }
       } catch (error) {
-
         if (error.response.status === 404) {
           this.message = "Error No se Desactivo la localizacion";
           this.showMessage = true;
-
         }
-
       }
     },
-
     setActive(btn) {
       if (btn === 1) {
         this.isActiveVisitor = !this.isActiveVisitor;

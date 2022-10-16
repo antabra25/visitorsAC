@@ -1,6 +1,6 @@
 <template>
 
-  <div class="xl:main-content-wrapper xl:mb-48 2xl:mb-[500px]">
+  <div class="main-content-wrapper">
     <h1 class="title">Visitas</h1>
     <info-message :is-display="showMessage" @close-tab="closeTab">{{ message }}</info-message>
     <div class="main-box">
@@ -87,9 +87,8 @@ export default {
       this.showMessage = false;
     },
     async releaseLocation() {
-      const user_id = localStorage.getItem("user_id");
       try {
-        const response = await this.axios.put(`/locations/update/${user_id}`, {
+        const response = await this.axios.put('/locations/update/', {
           available: true
         });
         if (response.status === 200) {
@@ -97,13 +96,10 @@ export default {
           this.$router.push("/");
         }
       } catch (error) {
-
         if (error.response.status === 404) {
           this.message = "Error No se Desactivo la localizacion";
           this.showMessage = true;
-
         }
-
       }
     },
     async findVisit() {
@@ -126,10 +122,8 @@ export default {
                 this.message = "Error del Servidor";
                 this.showMessage = true;
               }
-
             }
           );
-
       }
 
     },
@@ -143,14 +137,12 @@ export default {
           }
         ).catch(
           error => {
-
             if (error.response.status === 401) {
               this.releaseLocation();
             } else if (error.response.status === 404) {
               this.message = "No hay registros agregados";
               this.showMessage = true;
             }
-
           }
         );
     },
@@ -162,7 +154,6 @@ export default {
             this.showMessage = true;
             this.loadVisits();
           }
-
         })
         .catch(
           error => {

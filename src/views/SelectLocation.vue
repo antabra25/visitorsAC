@@ -1,5 +1,5 @@
 <template>
-  <div class="md:main-content-wrapper md:mt-8 md:pb-40 xl:mb-40 2xl:mb-[300px]">
+  <div class="main-content-wrapper">
     <h1 class="title">Selecciona Tu Ubicación</h1>
     <info-message :is-display="showMessage">{{ message }}</info-message>
     <form @submit.prevent="updateUserLocation" class="form">
@@ -68,10 +68,8 @@ export default {
         )
         .catch(error => {
             if (error.response.status === 401) {
-
               let detail = error.response.request.responseText;
               detail = JSON.parse(detail);
-
             }
           }
         );

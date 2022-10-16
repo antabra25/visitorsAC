@@ -57,9 +57,8 @@ export default {
       }
     },
     async releaseLocation() {
-      const user_id = localStorage.getItem("user_id");
       try {
-        const response = await this.axios.put(`/locations/update/${user_id}`, {
+        const response = await this.axios.put('/locations/update/', {
           available: true
         });
         if (response.status === 200) {
@@ -115,7 +114,7 @@ export default {
     },
     async getReport(id) {
       try {
-        const response = await this.axios.get(`/visits/report/${id}`)
+        const response = await this.axios.get(`/report/${id}`)
         if (response.status === 200) {
           console.log(response.data)
           window.open(response.data.url, "Reporte")
@@ -136,7 +135,7 @@ export default {
     },
     async generateReport() {
       try {
-        const response = await this.axios.post("/visits/report", {
+        const response = await this.axios.post("/report", {
           since: this.since,
           until: this.until,
           office_id: this.office,

@@ -17,7 +17,6 @@ export default {
 </script>
 
 <style scoped>
-
 input {
   border-radius: 5px;
   @apply w-[530px] h-[40px] bg-white font-content px-2 focus:border-2 border-oran outline-none
@@ -26,6 +25,4 @@ input {
 label {
   @apply font-content font-normal text-sm text-black mb-[12px] block
 }
-
-
 </style>

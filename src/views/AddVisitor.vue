@@ -58,14 +58,40 @@
         </collapse-input>
 
         <collapse-input>
-          <template #title> Equipos</template>
+          <template #title>Equipo 1</template>
           <template #body>
-            <entry-small name="Marca" input-type="text" v-model="brand"></entry-small>
-            <entry-small name="Modelo" input-type="text" v-model="deviceModel"></entry-small>
-            <entry-small name="Serial" input-type="text" v-model="serial"></entry-small>
+            <entry-small name="Marca" input-type="text" v-model="devices[0].brand"></entry-small>
+            <entry-small name="Modelo" input-type="text" v-model="devices[0].model"></entry-small>
+            <entry-small name="Serial" input-type="text" v-model="devices[0].serial"></entry-small>
           </template>
         </collapse-input>
+        <collapse-input>
+          <template #title>Equipo 2</template>
+          <template #body>
+            <entry-small name="Marca" input-type="text" v-model="devices[1].brand"></entry-small>
+            <entry-small name="Modelo" input-type="text" v-model="devices[1].model"></entry-small>
+            <entry-small name="Serial" input-type="text" v-model="devices[1].serial"></entry-small>
+          </template>
+        </collapse-input>
+        <collapse-input>
+          <template #title>Equipo 3</template>
+          <template #body>
+            <entry-small name="Marca" input-type="text" v-model="devices[2].brand"></entry-small>
+            <entry-small name="Modelo" input-type="text" v-model="devices[2].model"></entry-small>
+            <entry-small name="Serial" input-type="text" v-model="devices[2].serial"></entry-small>
+          </template>
+        </collapse-input>
+        <collapse-input>
+          <template #title>Equipo 4</template>
+          <template #body>
+            <entry-small name="Marca" input-type="text" v-model="devices[3].brand"></entry-small>
+            <entry-small name="Modelo" input-type="text" v-model="devices[3].model"></entry-small>
+            <entry-small name="Serial" input-type="text" v-model="devices[3].serial"></entry-small>
+          </template>
+        </collapse-input>
+
       </div>
+
       <base-button>Registrar</base-button>
     </form>
   </div>
@@ -111,9 +137,29 @@ export default {
       plate: null,
       maker: null,
       cardModel: null,
-      brand: null,
-      serial: null,
-      deviceModel: null,
+      devices: [
+        {
+          "brand": null,
+          "model": null,
+          "serial": null
+        },
+          {
+          "brand": null,
+          "model": null,
+          "serial": null
+        },
+          {
+          "brand": null,
+          "model": null,
+          "serial": null
+        },
+          {
+          "brand": null,
+          "model": null,
+          "serial": null
+        }
+
+      ],
       listBuildings: "",
       listReasons: "",
       listOffices: "",
@@ -124,20 +170,17 @@ export default {
       showMessage: false,
       message: "",
       cardMessage: "",
-      phoneMessage: ""
-
-
+      phoneMessage: "",
     };
   },
-
   methods: {
     closeTab() {
       this.showMessage = false
     },
-     async releaseLocation() {
-      const user_id = localStorage.getItem("user_id");
+    async releaseLocation() {
+
       try {
-        const response = await this.axios.put(`/locations/update/${user_id}`, {
+        const response = await this.axios.put('/locations/update/', {
           available: true
         });
         if (response.status === 200) {
@@ -145,16 +188,12 @@ export default {
           this.$router.push("/");
         }
       } catch (error) {
-
         if (error.response.status === 404) {
           this.message = "Error No se Desactivo la localizacion";
           this.showMessage = true;
-
         }
-
       }
     },
-
     validateFields() {
       if (
           this.photo &&
@@ -173,29 +212,22 @@ export default {
         this.homeCompany = this.homeCompany.toUpperCase()
         this.host = this.host.toUpperCase()
         this.validForm = true
-
       } else {
-
         this.validForm = false
-
       }
-
     },
 
     validatePhone() {
-
       if (this.phone != "" && this.phone.length === 11) {
         this.validPhone = true
       } else {
         this.validPhone = false
         this.phoneMessage = "Campo vacio o invalido"
       }
-
     },
     async validatePass() {
       console.log(this.cardId)
       if (this.cardId != "") {
-
         await this.axios.get(`/pass/${this.cardId}`)
             .then(response => {
                   if (response.status === 200) {
@@ -206,7 +238,6 @@ export default {
                     } else {
                       this.validCard = true
                     }
-
                   }
                 }
             )
@@ -234,11 +265,11 @@ export default {
               }
           ).catch(
               error => {
-                if(error.response.status === 403){
+                if (error.response.status === 403) {
 
-                }else if (error.response.status ===404){
+                } else if (error.response.status === 404) {
 
-                } else if(error.response.status > 404){
+                } else if (error.response.status > 404) {
 
                 }
 
@@ -293,8 +324,6 @@ export default {
     sendVisit: async function () {
       this.validateFields()
       if (this.validForm) {
-
-        console.log("Pase la validación de los campos")
         const fullName = this.host.split(" ");
         const visitor = {
           visitor_ci: this.CI,
@@ -314,11 +343,7 @@ export default {
           model: this.cardModel,
           plate: this.plate
         };
-        const device = {
-          brand: this.brand,
-          model: this.deviceModel,
-          serial: this.serial
-        };
+        const devices = this.devices
         parseInt(this.cardId);
         const visit = {
           reason_id: this.reason,
@@ -327,7 +352,7 @@ export default {
           passcard_id: parseInt(this.cardId),
           company: this.homeCompany
         };
-        const payload = {visit, visitor, worker, device, car, photo};
+        const payload = {visit, visitor, worker, devices, car, photo};
 
         await this.axios.post("/visits/create", payload)
             .then(
@@ -366,8 +391,7 @@ export default {
 
 <style scoped>
 .row {
-
-  @apply flex flex-row flex-nowrap  gap-x-[36px];
+  @apply flex flex-row flex-wrap  gap-x-[36px];
 }
 
 .column {

@@ -8,12 +8,12 @@
       </h1>
       <img v-if="!isCollapseActive"
            src="../assets/svg/bx-plus.svg"
-           alt="icon-dropdown"
+           alt="icon-dropdown-plus"
            class="icon-plus"
       />
       <img v-if="isCollapseActive"
            src="../assets/svg/bx-minus.svg"
-           alt="icon-dropdown"
+           alt="icon-dropdown-minus"
            class="icon-plus"
       />
     </div>
