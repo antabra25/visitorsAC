@@ -1,31 +1,27 @@
-<template>
-  <top-banner></top-banner>
-  <nav-bar v-if="$route.path !=='/' && $route.path!='/location' "></nav-bar>
-  <main class="bg-dirtywhite min-h-full">
-    <router-view></router-view>
-  </main>
-  <the-footer></the-footer>
-</template>
-
-<script>
+<script setup>
 import TopBanner from "./components/TopBanner.vue";
 import NavBar from "./components/NavBar.vue";
 import TheFooter from "./components/TheFooter.vue";
+import {ref} from 'vue'
 
-export default {
-  components: {
-    TopBanner,
-    TheFooter,
-    NavBar
-  },
+const initial = ref(0)
 
-  data() {
-    return {};
-  }
-};
 </script>
 
-<style></style>
+<template>
+
+  <top-banner/>
+  <nav-bar v-if="$route.path !=='/' && $route.path!='/location' "/>
+  <main className="bg-dirtywhite min-h-full">
+    <router-view/>
+  </main>
+  <the-footer/>
+</template>
+
+
+<style>
+
+</style>
 
 
 
