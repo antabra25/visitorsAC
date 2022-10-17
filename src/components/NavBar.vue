@@ -96,6 +96,10 @@ export default {
           this.message = "Error No se Desactivo la localizacion";
           this.showMessage = true;
         }
+        if(error.response.status ===403){
+          localStorage.clear();
+          this.$router.push("/");
+        }
       }
     },
     setActive(btn) {

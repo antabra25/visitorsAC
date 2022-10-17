@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-[78px] flex flex-col shrink-1">
+  <div class="mx-[78px] flex flex-col">
     <h1 class="text-2xl font-subtitle text-black font-medium mt-[60px] mb-[38px]">
       Registro Visitas
     </h1>
@@ -60,33 +60,33 @@
         <collapse-input>
           <template #title>Equipo 1</template>
           <template #body>
-            <entry-small name="Marca" input-type="text" v-model="devices[0].brand"></entry-small>
-            <entry-small name="Modelo" input-type="text" v-model="devices[0].model"></entry-small>
-            <entry-small name="Serial" input-type="text" v-model="devices[0].serial"></entry-small>
+            <entry-small name="Marca" input-type="text" v-model="brand1"></entry-small>
+            <entry-small name="Modelo" input-type="text" v-model="model1"></entry-small>
+            <entry-small name="Serial" input-type="text" v-model="serial1"></entry-small>
           </template>
         </collapse-input>
         <collapse-input>
           <template #title>Equipo 2</template>
           <template #body>
-            <entry-small name="Marca" input-type="text" v-model="devices[1].brand"></entry-small>
-            <entry-small name="Modelo" input-type="text" v-model="devices[1].model"></entry-small>
-            <entry-small name="Serial" input-type="text" v-model="devices[1].serial"></entry-small>
+            <entry-small name="Marca" input-type="text" v-model="brand2"></entry-small>
+            <entry-small name="Modelo" input-type="text" v-model="model2"></entry-small>
+            <entry-small name="Serial" input-type="text" v-model="serial2"></entry-small>
           </template>
         </collapse-input>
         <collapse-input>
           <template #title>Equipo 3</template>
           <template #body>
-            <entry-small name="Marca" input-type="text" v-model="devices[2].brand"></entry-small>
-            <entry-small name="Modelo" input-type="text" v-model="devices[2].model"></entry-small>
-            <entry-small name="Serial" input-type="text" v-model="devices[2].serial"></entry-small>
+            <entry-small name="Marca" input-type="text" v-model="brand3"></entry-small>
+            <entry-small name="Modelo" input-type="text" v-model="model3"></entry-small>
+            <entry-small name="Serial" input-type="text" v-model="serial3"></entry-small>
           </template>
         </collapse-input>
         <collapse-input>
           <template #title>Equipo 4</template>
           <template #body>
-            <entry-small name="Marca" input-type="text" v-model="devices[3].brand"></entry-small>
-            <entry-small name="Modelo" input-type="text" v-model="devices[3].model"></entry-small>
-            <entry-small name="Serial" input-type="text" v-model="devices[3].serial"></entry-small>
+            <entry-small name="Marca" input-type="text" v-model="brand4"></entry-small>
+            <entry-small name="Modelo" input-type="text" v-model="model4"></entry-small>
+            <entry-small name="Serial" input-type="text" v-model="serial4"></entry-small>
           </template>
         </collapse-input>
 
@@ -137,29 +137,18 @@ export default {
       plate: null,
       maker: null,
       cardModel: null,
-      devices: [
-        {
-          "brand": null,
-          "model": null,
-          "serial": null
-        },
-          {
-          "brand": null,
-          "model": null,
-          "serial": null
-        },
-          {
-          "brand": null,
-          "model": null,
-          "serial": null
-        },
-          {
-          "brand": null,
-          "model": null,
-          "serial": null
-        }
-
-      ],
+      brand1: null,
+      model1: null,
+      serial1: null,
+      brand2: null,
+      model2: null,
+      serial2:null,
+      brand3: null,
+      model3: null,
+      serial3:null,
+      brand4: null,
+      model4: null,
+      serial4:null,
       listBuildings: "",
       listReasons: "",
       listOffices: "",
@@ -178,7 +167,6 @@ export default {
       this.showMessage = false
     },
     async releaseLocation() {
-
       try {
         const response = await this.axios.put('/locations/update/', {
           available: true
@@ -322,7 +310,9 @@ export default {
           });
     },
     sendVisit: async function () {
+
       this.validateFields()
+
       if (this.validForm) {
         const fullName = this.host.split(" ");
         const visitor = {
@@ -343,7 +333,28 @@ export default {
           model: this.cardModel,
           plate: this.plate
         };
-        const devices = this.devices
+        const devices = [
+          {
+            brand: this.brand1,
+            model: this.model1,
+            serial: this.serial1
+          },
+          {
+            brand: this.brand2,
+            model: this.model2,
+            serial: this.serial2
+          },
+          {
+            brand: this.brand3,
+            model: this.model3,
+            serial: this.serial3
+          },
+          {
+            brand: this.brand4,
+            model: this.model4,
+            serial: this.serial4
+          }
+        ];
         parseInt(this.cardId);
         const visit = {
           reason_id: this.reason,
@@ -352,8 +363,9 @@ export default {
           passcard_id: parseInt(this.cardId),
           company: this.homeCompany
         };
-        const payload = {visit, visitor, worker, devices, car, photo};
 
+        const payload = {visit, visitor, worker, devices, car, photo};
+        console.log(payload)
         await this.axios.post("/visits/create", payload)
             .then(
                 response => {

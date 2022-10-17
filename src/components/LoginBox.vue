@@ -76,11 +76,11 @@ export default {
                 localStorage.setItem('user_id', response.data.user_id)
                 localStorage.setItem('role_id', response.data.role_id)
                 const roleId = localStorage.getItem('role_id')
-                console.log(roleId,typeof roleId)
+
                 if (roleId === '1' || roleId === '2') {
                   this.$router.push("/home")
-                }else {
-                   this.$router.push('/location');
+                } else {
+                  this.$router.push('/location');
                 }
 
               }
