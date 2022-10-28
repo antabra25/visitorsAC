@@ -17,6 +17,12 @@ import SmallButton from "./SmallButton.vue";
 export default {
   name: "WebCam",
   emits: ["uploadPhoto"],
+  props: {
+    photo: {
+      type: String,
+      default: ""
+    }
+  },
   components: {
     SmallButton
   },
@@ -46,6 +52,14 @@ export default {
       this.$emit("uploadPhoto", image); // emit the image to the parent component
 
     },
+    displayPhoto() {
+      let ctx = this.$refs.canvas.getContext("2d"); // get the context of the canvas
+      let img = new Image();
+      img.src = this.photo;
+      img.onload = () => {
+        ctx.drawImage(img, 0, 0, 320, 320);
+      };
+    },
     pause() { // stop the video
       this.$refs.video.pause();
     },
@@ -53,6 +67,11 @@ export default {
       this.$refs.video.play();
     }
 
+  },
+  watch: {
+    photo() {
+      this.displayPhoto();
+    }
   },
   mounted() {
     this.mediaSetup();

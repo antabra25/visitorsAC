@@ -4,8 +4,8 @@
       Registro Visitas
     </h1>
     <info-message :is-display="showMessage" @close-tab="closeTab">{{ message }}</info-message>
-    <web-cam @upload-photo="(canva)=>photo=canva">
-    </web-cam>
+    <web-cam @upload-photo="(canva)=>photo=canva" :photo="serverPhoto"/>
+
     <form @submit.prevent="sendVisit" ref="visit">
       <h2 class="sub mb-[25px]">Datos Personales</h2>
 
@@ -49,7 +49,7 @@
 
       <div class="row mt-[25px] mb-[54px]">
         <collapse-input>
-          <template #title>Vehiculos</template>
+          <template #title>Vehiculo</template>
           <template #body>
             <entry-small name="Fabricante" input-type="text" v-model="maker"></entry-small>
             <entry-small name="Serie" input-type="text" v-model="cardModel"></entry-small>
@@ -58,42 +58,42 @@
         </collapse-input>
 
         <collapse-input>
-          <template #title>Equipo 1</template>
+          <template #title>Equipo</template>
           <template #body>
-            <entry-small name="Marca" input-type="text" v-model="brand1"></entry-small>
-            <entry-small name="Modelo" input-type="text" v-model="model1"></entry-small>
-            <entry-small name="Serial" input-type="text" v-model="serial1"></entry-small>
+            <entry-small name="Marca" input-type="text" v-model="devices.brand[0]"></entry-small>
+            <entry-small name="Modelo" input-type="text" v-model="devices.model[0]"></entry-small>
+            <entry-small name="Serial" input-type="text" v-model="devices.serial[0]"></entry-small>
           </template>
         </collapse-input>
         <collapse-input>
-          <template #title>Equipo 2</template>
+          <template #title>Equipo</template>
           <template #body>
-            <entry-small name="Marca" input-type="text" v-model="brand2"></entry-small>
-            <entry-small name="Modelo" input-type="text" v-model="model2"></entry-small>
-            <entry-small name="Serial" input-type="text" v-model="serial2"></entry-small>
+            <entry-small name="Marca" input-type="text" v-model="devices.brand[1]"></entry-small>
+            <entry-small name="Modelo" input-type="text" v-model="devices.model[1]"></entry-small>
+            <entry-small name="Serial" input-type="text" v-model="devices.serial[1]"></entry-small>
           </template>
         </collapse-input>
         <collapse-input>
-          <template #title>Equipo 3</template>
+          <template #title>Equipo</template>
           <template #body>
-            <entry-small name="Marca" input-type="text" v-model="brand3"></entry-small>
-            <entry-small name="Modelo" input-type="text" v-model="model3"></entry-small>
-            <entry-small name="Serial" input-type="text" v-model="serial3"></entry-small>
+            <entry-small name="Marca" input-type="text" v-model="devices.brand[2]"></entry-small>
+            <entry-small name="Modelo" input-type="text" v-model="devices.model[2]"></entry-small>
+            <entry-small name="Serial" input-type="text" v-model="devices.serial[2]"></entry-small>
           </template>
         </collapse-input>
         <collapse-input>
-          <template #title>Equipo 4</template>
+          <template #title>Equipo</template>
           <template #body>
-            <entry-small name="Marca" input-type="text" v-model="brand4"></entry-small>
-            <entry-small name="Modelo" input-type="text" v-model="model4"></entry-small>
-            <entry-small name="Serial" input-type="text" v-model="serial4"></entry-small>
+            <entry-small name="Marca" input-type="text" v-model="devices.brand[3]"></entry-small>
+            <entry-small name="Modelo" input-type="text" v-model="devices.model[3]"></entry-small>
+            <entry-small name="Serial" input-type="text" v-model="devices.serial[3]"></entry-small>
           </template>
         </collapse-input>
 
       </div>
-
       <base-button>Registrar</base-button>
     </form>
+
   </div>
 </template>
 
@@ -137,22 +137,16 @@ export default {
       plate: null,
       maker: null,
       cardModel: null,
-      brand1: null,
-      model1: null,
-      serial1: null,
-      brand2: null,
-      model2: null,
-      serial2:null,
-      brand3: null,
-      model3: null,
-      serial3:null,
-      brand4: null,
-      model4: null,
-      serial4:null,
+      devices: {
+        "brand": [],
+        "model": [],
+        "serial": []
+      },
       listBuildings: "",
       listReasons: "",
       listOffices: "",
       photo: null,
+      serverPhoto: null,
       validCard: null,
       validPhone: null,
       validForm: null,
@@ -278,7 +272,6 @@ export default {
       }
     },
     findVisitor: async function () {
-      console.log(this.photo)
       const CI = this.CI;
       const URL = `/visitors/${CI}`;
       await this.axios.get(URL)
@@ -286,6 +279,8 @@ export default {
             this.name = response.data.name;
             this.lastName = response.data.lastname;
             this.phone = response.data.phone;
+            this.serverPhoto = response.data.photo;
+
           })
           .catch((error) => {
             console.log(error);
@@ -311,6 +306,8 @@ export default {
     },
     sendVisit: async function () {
 
+      console.log(this.devices)
+
       this.validateFields()
 
       if (this.validForm) {
@@ -319,11 +316,32 @@ export default {
           visitor_ci: this.CI,
           name: this.name,
           lastname: this.lastName,
-          phone: this.phone
+          phone: this.phone,
+          photo: this.photo
         };
-        const photo = {
-          url: this.photo
-        }
+        const devices = [
+          {
+            brand: this.devices.brand[0],
+            model: this.devices.model[0],
+            serial: this.devices.serial[0]
+          },
+          {
+            brand: this.devices.brand[1],
+            model: this.devices.model[1],
+            serial: this.devices.serial[1]
+          },
+          {
+            brand: this.devices.brand[2],
+            model: this.devices.model[2],
+            serial: this.devices.serial[2]
+          },
+          {
+            brand: this.devices.brand[3],
+            model: this.devices.model[3],
+            serial: this.devices.serial[3]
+          }
+        ]
+
         const worker = {
           name: fullName[0],
           lastname: fullName[1]
@@ -333,28 +351,6 @@ export default {
           model: this.cardModel,
           plate: this.plate
         };
-        const devices = [
-          {
-            brand: this.brand1,
-            model: this.model1,
-            serial: this.serial1
-          },
-          {
-            brand: this.brand2,
-            model: this.model2,
-            serial: this.serial2
-          },
-          {
-            brand: this.brand3,
-            model: this.model3,
-            serial: this.serial3
-          },
-          {
-            brand: this.brand4,
-            model: this.model4,
-            serial: this.serial4
-          }
-        ];
         parseInt(this.cardId);
         const visit = {
           reason_id: this.reason,
@@ -364,12 +360,16 @@ export default {
           company: this.homeCompany
         };
 
-        const payload = {visit, visitor, worker, devices, car, photo};
-        console.log(payload)
+        const payload = {visit, visitor, worker};
         await this.axios.post("/visits/create", payload)
             .then(
-                response => {
+                 (response) => {
                   if (response.status === 201) {
+                    const visitor_id = response.data.visitor_id;
+
+                    // const car = await this.axios.post(`/cars/create/${visitor_id}`, car)
+                    // const devices = await this.axios.post(`/devices/create/${visitor_id}`, devices)
+
                     this.message = "Visita Agregada"
                     this.showMessage = true
                     this.$refs.visit.reset()
