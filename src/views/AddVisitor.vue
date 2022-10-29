@@ -60,33 +60,33 @@
         <collapse-input>
           <template #title>Equipo</template>
           <template #body>
-            <entry-small name="Marca" input-type="text" v-model="devices.brand[0]"></entry-small>
-            <entry-small name="Modelo" input-type="text" v-model="devices.model[0]"></entry-small>
-            <entry-small name="Serial" input-type="text" v-model="devices.serial[0]"></entry-small>
+            <entry-small name="Marca" input-type="text" v-model="brand1"></entry-small>
+            <entry-small name="Modelo" input-type="text" v-model="model1"></entry-small>
+            <entry-small name="Serial" input-type="text" v-model="serial1"></entry-small>
           </template>
         </collapse-input>
         <collapse-input>
           <template #title>Equipo</template>
           <template #body>
-            <entry-small name="Marca" input-type="text" v-model="devices.brand[1]"></entry-small>
-            <entry-small name="Modelo" input-type="text" v-model="devices.model[1]"></entry-small>
-            <entry-small name="Serial" input-type="text" v-model="devices.serial[1]"></entry-small>
+            <entry-small name="Marca" input-type="text" v-model="brand2"></entry-small>
+            <entry-small name="Modelo" input-type="text" v-model="model2"></entry-small>
+            <entry-small name="Serial" input-type="text" v-model="serial2"></entry-small>
           </template>
         </collapse-input>
         <collapse-input>
           <template #title>Equipo</template>
           <template #body>
-            <entry-small name="Marca" input-type="text" v-model="devices.brand[2]"></entry-small>
-            <entry-small name="Modelo" input-type="text" v-model="devices.model[2]"></entry-small>
-            <entry-small name="Serial" input-type="text" v-model="devices.serial[2]"></entry-small>
+            <entry-small name="Marca" input-type="text" v-model="brand3"></entry-small>
+            <entry-small name="Modelo" input-type="text" v-model="model3"></entry-small>
+            <entry-small name="Serial" input-type="text" v-model="serial3"></entry-small>
           </template>
         </collapse-input>
         <collapse-input>
           <template #title>Equipo</template>
           <template #body>
-            <entry-small name="Marca" input-type="text" v-model="devices.brand[3]"></entry-small>
-            <entry-small name="Modelo" input-type="text" v-model="devices.model[3]"></entry-small>
-            <entry-small name="Serial" input-type="text" v-model="devices.serial[3]"></entry-small>
+            <entry-small name="Marca" input-type="text" v-model="brand4"></entry-small>
+            <entry-small name="Modelo" input-type="text" v-model="model4"></entry-small>
+            <entry-small name="Serial" input-type="text" v-model="serial4"></entry-small>
           </template>
         </collapse-input>
 
@@ -137,11 +137,18 @@ export default {
       plate: null,
       maker: null,
       cardModel: null,
-      devices: {
-        "brand": [],
-        "model": [],
-        "serial": []
-      },
+      brand1: null,
+      model1: null,
+      serial1: null,
+      brand2: null,
+      model2: null,
+      serial2: null,
+      brand3: null,
+      model3: null,
+      serial3: null,
+      brand4: null,
+      model4: null,
+      serial4: null,
       listBuildings: "",
       listReasons: "",
       listOffices: "",
@@ -306,7 +313,6 @@ export default {
     },
     sendVisit: async function () {
 
-      console.log(this.devices)
 
       this.validateFields()
 
@@ -319,28 +325,6 @@ export default {
           phone: this.phone,
           photo: this.photo
         };
-        const devices = [
-          {
-            brand: this.devices.brand[0],
-            model: this.devices.model[0],
-            serial: this.devices.serial[0]
-          },
-          {
-            brand: this.devices.brand[1],
-            model: this.devices.model[1],
-            serial: this.devices.serial[1]
-          },
-          {
-            brand: this.devices.brand[2],
-            model: this.devices.model[2],
-            serial: this.devices.serial[2]
-          },
-          {
-            brand: this.devices.brand[3],
-            model: this.devices.model[3],
-            serial: this.devices.serial[3]
-          }
-        ]
 
         const worker = {
           name: fullName[0],
@@ -360,21 +344,61 @@ export default {
           company: this.homeCompany
         };
 
-        const payload = {visit, visitor, worker};
-        await this.axios.post("/visits/create", payload)
-            .then(
-                 (response) => {
+        const devices = [
+          {
+            brand: this.brand1,
+            model: this.model1,
+            serial: this.serial1
+          },
+          {
+            brand: this.brand2,
+            model: this.model2,
+            serial: this.serial2
+          },
+          {
+            brand: this.brand3,
+            model: this.model3,
+            serial: this.serial3
+          },
+          {
+            brand: this.brand4,
+            model: this.model4,
+            serial: this.serial4
+          }
+        ]
+
+
+        const data = {visit, visitor, worker};
+        await this.axios.post("/visits/create", data)
+            .then(response => {
+              console.log(response)
+              const visitior_id = response.data.visitor_id
                   if (response.status === 201) {
-                    const visitor_id = response.data.visitor_id;
-
-                    // const car = await this.axios.post(`/cars/create/${visitor_id}`, car)
-                    // const devices = await this.axios.post(`/devices/create/${visitor_id}`, devices)
-
-                    this.message = "Visita Agregada"
-                    this.showMessage = true
-                    this.$refs.visit.reset()
-
+                    this.axios.post(`/devices/create/${visitior_id}`, devices)
+                        .then(response => {
+                          if (response.status === 201) {
+                            console.log("Dispositivos creados")
+                          }
+                        })
+                        .catch(error => {
+                          console.log("Error en dispositovos")
+                          console.log(error);
+                        })
+                    this.axios.post(`/cars/create/${visitior_id}`, car)
+                        .then(response => {
+                          if (response.status === 201) {
+                            console.log("Carro creado")
+                          }
+                        })
+                        .catch(error => {
+                          console.log("Error en carro")
+                          console.log(error);
+                        })
                   }
+                  this.message = "Visita Agregada"
+                  this.showMessage = true
+                  this.$refs.visit.reset()
+
                 }
             ).catch(error => {
               if (error.response.status === 401) {
@@ -392,13 +416,15 @@ export default {
         this.showMessage = true
       }
     }
-  },
+  }
+  ,
   mounted() {
     this.loadBuildings();
     this.loadReasons();
 
   }
-};
+}
+;
 </script>
 
 <style scoped>
