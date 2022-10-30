@@ -37,42 +37,49 @@ export default {
 
   },
   methods: {
+    logOut() {
+      localStorage.clear();
+      this.$router.push("/");
+    },
     async updateUserLocation() {
       const userId = localStorage.getItem("user_id");
       await this.axios.put(`/users/update/location/${userId}`, {
         location_id: this.location
       }).then(
-        response => {
-          if (response.status === 200) {
-            this.$router.push("/home");
+          response => {
+            if (response.status === 200) {
+              this.$router.push("/home");
+            }
           }
-        }
       ).catch(
-        error => {
-          if (error.response.status === 404 || error.response.status > 400) {
-            this.message = "Error Localizacion no Asignada";
-            this.showMessage = true;
-
+          error => {
+            if (error.response.status === 404 || error.response.status > 400) {
+              this.message = "Error Localizacion no Modificada";
+              this.showMessage = true;
+            } else if (error.response.status === 401) {
+              this.logOut();
+            }
           }
-        }
       );
     },
     async loadLocations() {
       await this.axios.get("/locations/")
-        .then(
-          response => {
-            if (response.status === 200) {
-              this.listLocation = response.data;
-            }
-          }
-        )
-        .catch(error => {
-            if (error.response.status === 401) {
-              let detail = error.response.request.responseText;
-              detail = JSON.parse(detail);
-            }
-          }
-        );
+          .then(
+              response => {
+                if (response.status === 200) {
+                  this.listLocation = response.data;
+                }
+              }
+          )
+          .catch(error => {
+                if (error.response.status === 401) {
+                  this.logOut()
+                } else if (error.response.status === 404) {
+                  this.message = "No existen localizaciones registradas";
+                  this.showMessage = true;
+                }
+              }
+          );
     }
   },
   mounted() {

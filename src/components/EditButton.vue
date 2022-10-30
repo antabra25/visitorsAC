@@ -1,15 +1,13 @@
 <template>
-  <button class="edit-btn">
-    <router-link to="">
-      <img src="../assets/svg/bx-edit.svg">
-    </router-link>
-
+  <button class="edit-btn" @click="$emit('check')">
+    <img src="../assets/svg/bx-edit.svg">
   </button>
 </template>
 
 <script>
 export default {
-  name: "EditButton"
+  name: "EditButton",
+  emits: ["check"],
 };
 </script>
 

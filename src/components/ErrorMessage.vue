@@ -4,12 +4,7 @@
 
 <script>
 export default {
-  name: "TheChecks",
-  data() {
-    return {
-    }
-  }
-
+  name: "ErrorMessage"
 }
 </script>
 

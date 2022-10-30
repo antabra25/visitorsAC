@@ -7,16 +7,16 @@
 
       <div class="typeSearch flex flex-row flex-nowrap gap-x-2.5 font-semibold font-title justify-center">
         <search-input v-model="search" @keydown.enter="findVisit"></search-input>
-        <input type="radio" id="CI" value="CI" v-model="picked" />
+        <input type="radio" id="CI" value="CI" v-model="picked"/>
         <label for="CI">C.I</label>
 
-        <input type="radio" id="phone" value="telf" v-model="picked" />
+        <input type="radio" id="phone" value="telf" v-model="picked"/>
         <label for="phone">Telf</label>
 
-        <input type="radio" id="office" value="office" v-model="picked" />
+        <input type="radio" id="office" value="office" v-model="picked"/>
         <label for="office">Oficina</label>
 
-        <input type="radio" id="date" value="date" v-model="picked" />
+        <input type="radio" id="date" value="date" v-model="picked"/>
         <label for="date">Fecha</label>
       </div>
 
@@ -57,6 +57,9 @@
         </tbody>
       </table>
     </div>
+    <pagination-button  @left="()=>pageNumber--" @right="()=>pageNumber++">
+      Cargar más
+    </pagination-button>
   </div>
 
 </template>
@@ -64,12 +67,14 @@
 <script>
 import SearchInput from "../components/SearchInput.vue";
 import InfoMessage from "../components/InfoMessage.vue";
+import PaginationButton from "../components/PaginationButton.vue";
 
 export default {
   name: "FindVisitor",
   components: {
     SearchInput,
-    InfoMessage
+    InfoMessage,
+    PaginationButton
   },
   data() {
     return {
@@ -78,105 +83,93 @@ export default {
       search: null,
       picked: null,
       message: "",
-      showMessage: false
+      showMessage: false,
+      pageSize: 2,
+      pageNumber: 1,
 
     };
   },
+  watch: {
+    pageNumber() {
+      this.loadVisits()
+    }
+  },
   methods: {
-    closeTab(){
+    closeTab() {
       this.showMessage = false;
     },
-    async releaseLocation() {
+    logOut() {
+      localStorage.clear();
+      this.$router.push("/");
+    },
+    async findVisit() {
+
       try {
-        const response = await this.axios.put('/locations/update/', {
-          available: true
-        });
-        if (response.status === 200) {
-          localStorage.clear();
-          this.$router.push("/");
+        if (this.search && this.picked) {
+          const response = await this.axios.get(`/visits/find/${this.search}/${this.picked}`)
+
+          if (response.status === 200) {
+            this.visits = response.data;
+          }
         }
       } catch (error) {
-        if (error.response.status === 404) {
-          this.message = "Error No se Desactivo la localizacion";
+
+        if (error.response.status === 401) {
+          this.logOut()
+        } else if (error.response.status === 404) {
+          this.message = "No se encontraron coincidencia";
+        } else {
+          this.message = "Error del Servidor";
           this.showMessage = true;
         }
       }
     },
-    async findVisit() {
-      if (this.search && this.picked) {
-        await this.axios.get(`/visits/find/${this.search}/${this.picked}`)
-          .then(
-            response => {
-              if (response.status === 200) {
-                this.visits = response.data;
-              }
-            }
-          )
-          .catch(
-            error => {
-              if (error.response.status === 401) {
-                this.releaseLocation();
-              } else if (error.response.status === 404) {
-                this.message = "No se encontraron coincidencia";
-              } else {
-                this.message = "Error del Servidor";
-                this.showMessage = true;
-              }
-            }
-          );
-      }
-
-    },
     async loadVisits() {
-      await this.axios.get("/visits/")
-        .then(
-          response => {
-            if (response.status === 200) {
-              this.visits = response.data;
-            }
-          }
-        ).catch(
-          error => {
-            if (error.response.status === 401) {
-              this.releaseLocation();
-            } else if (error.response.status === 404) {
-              this.message = "No hay registros agregados";
-              this.showMessage = true;
-            }
-          }
-        );
+      try {
+        const visits = await this.axios.get(`/visits/?page_size=${this.pageSize}&page_number=${this.pageNumber}`)
+        if (visits.status == 200) {
+          this.visits = visits.data
+        }
+      } catch (error) {
+
+        if (error.response.status === 401) {
+          this.logOut()
+        } else if (error.response.status === 404) {
+          this.message = "No hay registros agregados";
+          this.showMessage = true;
+        }
+      }
     },
+
     async deleteVisit(id) {
-      await this.axios.delete(`/visits/delete/${id}`)
-        .then(response => {
-          if (response.status === 204) {
-            this.message = "Elemento  eliminado";
-            this.showMessage = true;
-            this.loadVisits();
-          }
-        })
-        .catch(
-          error => {
-            if (error.response.status === 401) {
-              this.releaseLocation();
-            } else if (error.response.status === 404) {
-              this.message = "No existe elemento con el ID proporcionado";
-              this.showMessage = true;
-            }
-          }
-        );
+      try {
+        const response = await this.axios.delete(`/visits/delete/${id}`)
+        if (response.status === 204) {
+          this.message = "Elemento  eliminado";
+          this.showMessage = true;
+          await this.loadVisits();
+        }
+      } catch (error) {
+
+        if (error.response.status === 401) {
+          this.logOut()
+        } else if (error.response.status === 404) {
+          this.message = "No existe elemento con el ID proporcionado";
+          this.showMessage = true;
+        } else {
+          this.message = "Error del Servidor";
+          this.showMessage = true;
+        }
+      }
     }
-  },
+  }
+  ,
   mounted() {
     this.loadVisits();
   }
-};
+}
+;
 </script>
 
 <style scoped>
-
-table {
-}
-
-
 </style>

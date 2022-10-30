@@ -55,26 +55,13 @@ export default {
     };
   },
   methods: {
-    async releaseLocation() {
-      try {
-        const response = await this.axios.put('/locations/update/', {
-          available: true
-        });
-        if (response.status === 200) {
-          localStorage.clear();
-          this.$router.push("/");
-        }
-      } catch (error) {
 
-        if (error.response.status === 404) {
-          this.message = "Error No se Desactivo la localizacion";
-          this.showMessage = true;
-
-        }
-      }
-    },
     closeTab() {
       this.showMessage = false;
+    },
+    logOut(){
+      localStorage.clear()
+      this.$router.push("/")
     },
     validateName() {
 
@@ -127,14 +114,14 @@ export default {
           .catch(error => {
 
             if (error.response.status === 401) {
-              this.releaseLocation();
+              this.logOut()
 
             } else if (error.response.status == 409) {
               this.message = "Ya existe un registro con este Nombre";
               this.showMessage = true;
 
             } else {
-              this.message = "Error registro no agregado";
+              this.message = "Error en el Servidor";
               this.showMessage = true;
             }
 

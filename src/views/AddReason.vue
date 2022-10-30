@@ -70,24 +70,9 @@ export default {
   },
   methods: {
 
-    async releaseLocation() {
-      try {
-        const response = await this.axios.put('/locations/update/', {
-          available: true
-        });
-        if (response.status === 200) {
-          localStorage.clear();
-          this.$router.push("/");
-        }
-      } catch (error) {
-
-        if (error.response.status === 404) {
-          this.message = "Error No se Desactivo la localizacion";
-          this.showMessage = true;
-
-        }
-
-      }
+    logOut() {
+      localStorage.clear()
+      this.$router.push('/')
     },
     closeTab() {
       this.showMessage = false;
@@ -106,7 +91,7 @@ export default {
           this.message = "Error.No existe registro con ese nombre"
           this.showMessage = true
         } else if (error.response.status === 401) {
-          this.releaseLocation()
+          this.logOut()
         }
       }
 
@@ -128,8 +113,10 @@ export default {
             this.reasons = response.data;
           }
       ).catch(error => {
-        console.log(error);
-      });
+        if (error.response.status === 401) {
+          this.logOut()
+        }
+      })
 
     },
     sendReason: async function () {
@@ -142,13 +129,13 @@ export default {
           if (response.status === 201) {
             this.message = "Motivo registrado"
             this.showMessage = true
-             this.$refs.reason.reset();
+            this.$refs.reason.reset();
             await this.loadReasons();
           }
         } catch (error) {
 
           if (error.response.status === 401) {
-            await this.releaseLocation();
+            this.loadReasons()
 
           } else if (error.response.status == 404 && JSON.parse(error.response.request.responseText).detail === "Field Name Duplicate") {
             this.message = "Error.El motivo ya existe"

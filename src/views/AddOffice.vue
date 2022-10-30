@@ -59,23 +59,9 @@ export default {
     }
   }
   , methods: {
-    async releaseLocation() {
-
-      try {
-        const response = await this.axios.put('/locations/update/', {
-          available: true
-        });
-        if (response.status === 200) {
-          localStorage.clear();
-          this.$router.push("/");
-        }
-      } catch (error) {
-
-        if (error.response.status === 404) {
-          this.message = "Error No se Desactivo la localizacion";
-          this.showMessage = true;
-        }
-      }
+    logOut() {
+      localStorage.clear()
+      this.$router.push("/")
     },
     closeTab() {
       this.showMessage = false
@@ -138,11 +124,11 @@ export default {
             }
         ).catch(
             error => {
-              if(error.response.status === 401){
-                this.releaseLocation()
-              }else if(error.response.status > 401){
-              this.message = "Error Oficina no Agregada"
-              this.showMessage = true
+              if (error.response.status === 401) {
+                this.logOut()
+              } else if (error.response.status > 401) {
+                this.message = "Error en el Servidor."
+                this.showMessage = true
               }
             }
         )
@@ -159,7 +145,12 @@ export default {
           .then(response => {
             this.buildings = response.data
           }).catch(error => {
-            console.error('Error', error)
+        if (error.response.status === 401) {
+          this.logOut()
+        } else if (error.response.status > 401) {
+          this.message = "Error en el Servidor."
+          this.showMessage = true
+        }
           })
     },
     setValue: async function (value) {

@@ -31,7 +31,7 @@
         </button>
       </div>
 
-      <div class="dropdown menu-item"  v-if="currentRole === '1'|| currentRole ==='2'">
+      <div class="dropdown menu-item" v-if="currentRole === '1'|| currentRole ==='2'">
         <button class="dropdown-btn" @click="setActive(2)">
           ADMINISTRAR
           <img src="../assets/svg/barret.svg" alt="">
@@ -55,12 +55,13 @@
 
         <div :class="isActiveUser ? 'dropdown-content':'hidden'">
           <router-link class="sub-menu-item" to="/user">REGISTRO</router-link>
+          <router-link class="sub-menu-item" to="/users">BUSCAR</router-link>
         </div>
 
       </div>
 
-      <div  id="logout-btn">
-        <button @click="releaseLocation">
+      <div id="logout-btn">
+        <button @click="logOut">
           <img src="../assets/svg/logout.svg">
         </button>
       </div>
@@ -82,26 +83,11 @@ export default {
 
   },
   methods: {
-    async releaseLocation() {
-      try {
-        const response = await this.axios.put('/locations/update/', {
-          available: true
-        });
-        if (response.status === 200) {
-          localStorage.clear();
-          this.$router.push("/");
-        }
-      } catch (error) {
-        if (error.response.status === 404) {
-          this.message = "Error No se Desactivo la localizacion";
-          this.showMessage = true;
-        }
-        if(error.response.status ===403){
-          localStorage.clear();
-          this.$router.push("/");
-        }
-      }
+    logOut() {
+      localStorage.clear();
+      this.$router.push("/");
     },
+
     setActive(btn) {
       if (btn === 1) {
         this.isActiveVisitor = !this.isActiveVisitor;

@@ -1,20 +1,20 @@
 <template>
 
-  <div class="main-content-wrapper" >
-    <info-message :is-display="showMessage">{{message}}</info-message>
+  <div class="main-content-wrapper">
+    <info-message :is-display="showMessage">{{ message }}</info-message>
     <h1 class="title-local">Visitantes Activos</h1>
     <search-input name="Buscar" class="ml-[78px] mt-8"></search-input>
     <div class="visitor-layout">
       <visitor-card
-        v-for="visitor in visitors"
-        :key="visitor.ci"
-        :name="visitor.name"
-        :lastname="visitor.lastname"
-        :ci="visitor.ci"
-        :office="visitor.office"
-        :building="visitor.building"
-        :flat="visitor.flat"
-        :photo="visitor.photo">
+          v-for="visitor in visitors"
+          :key="visitor.ci"
+          :name="visitor.name"
+          :lastname="visitor.lastname"
+          :ci="visitor.ci"
+          :office="visitor.office"
+          :building="visitor.building"
+          :flat="visitor.flat"
+          :photo="visitor.photo">
       </visitor-card>
     </div>
   </div>
@@ -36,31 +36,17 @@ export default {
   data() {
     return {
       visitors: null,
-      message:'',
-      showMessage:false,
+      message: '',
+      showMessage: false,
     };
   },
   methods: {
     closeTab() {
       this.showMessage = false;
     },
-    async releaseLocation() {
-      try {
-        const response = await this.axios.put('/locations/update/', {
-          available: true
-        });
-        if (response.status === 200) {
-          localStorage.clear();
-          this.$router.push("/");
-        }
-      } catch (error) {
-
-        if (error.response.status === 404) {
-          this.message = "Error No se Desactivo la localizacion";
-          this.showMessage = true;
-        }
-
-      }
+    logOut() {
+      localStorage.clear()
+      this.$router.push("/")
     },
     async loadActiveVisitors() {
       try {
@@ -71,9 +57,10 @@ export default {
         }
       } catch (error) {
         if (error.response.status === 401) {
-          this.releaseLocation();
+          this.logOut()
         } else if (error.response.status > 401) {
-
+          this.message = "Error en el Servidor"
+          this.showMessage = true
         }
 
       }

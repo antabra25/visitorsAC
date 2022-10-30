@@ -7,15 +7,15 @@
           <img :src="photo" alt="">
         </div>
         <div class="info">
-          <h2>{{name}} {{lastname}}</h2>
-          <h2>{{ci}}</h2>
-          <h2>Edif:{{building}}</h2>
-          <h2>Oficina: {{office}}</h2>
-          <h2>Piso: {{flat}}</h2>
+          <h2>{{ name }} {{ lastname }}</h2>
+          <h2>{{ ci }}</h2>
+          <h2>Edif:{{ building }}</h2>
+          <h2>Oficina: {{ office }}</h2>
+          <h2>Piso: {{ flat }}</h2>
         </div>
         <div class="controls-btn items-end">
-          <edit-button></edit-button>
-          <delete-button></delete-button>
+          <edit-button @check="checkVisitor"/>
+          <delete-button @close="closeVisit"/>
         </div>
       </div>
     </div>
@@ -29,10 +29,21 @@ import DeleteButton from "./DeleteButton.vue";
 
 export default {
   name: "VisitorCard",
-  props:['name','lastname','ci','office','building','flat','photo','key'],
+  props: ['name', 'lastname', 'ci', 'office', 'building', 'flat', 'photo'],
   components: {
     DeleteButton,
     EditButton
+  },
+  data() {
+    return {}
+  },
+  methods: {
+    async checkVisitor() {
+
+    },
+    async closeVisit() {
+
+    }
   }
 };
 </script>

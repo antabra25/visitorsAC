@@ -56,24 +56,9 @@ export default {
 
       }
     },
-    async releaseLocation() {
-      try {
-        const response = await this.axios.put('/locations/update/', {
-          available: true
-        });
-        if (response.status === 200) {
-          localStorage.clear();
-          this.$router.push("/");
-        }
-      } catch (error) {
-
-        if (error.response.status === 404) {
-          this.message = "Error No se Desactivo la localizacion";
-          this.showMessage = true;
-
-        }
-
-      }
+   logOut() {
+      localStorage.clear()
+      this.$router.push("/");
     },
     async loadBuildings() {
       try {
@@ -86,7 +71,7 @@ export default {
           this.message = "Error No se pudo cargar los edificios";
           this.showMessage = true;
         } else if (error.response.status === 401) {
-          await this.releaseLocation()
+          this.logOut()
         }
       }
     },
@@ -100,7 +85,7 @@ export default {
           ).catch(
               error => {
                 if (error.response.status === 401) {
-                  this.releaseLocation()
+                  this.logOut()
                 } else if (error.response.status === 404) {
                   this.message = "No se encontraron oficinas";
                   this.showMessage = true;
@@ -126,7 +111,7 @@ export default {
         if (status === 404) {
 
         } else if (status === 401) {
-          await this.releaseLocation()
+          this.logOut()
 
         }
 
@@ -148,7 +133,7 @@ export default {
         }
       } catch (error) {
         if (error.response.status === 401) {
-          await this.releaseLocation()
+          this.logOut()
         } else if (error.response.status === 404) {
           this.message = "No se encontraron coincidencias"
           this.showMessage = true

@@ -6,6 +6,7 @@
       <div class="info-display relative">
         <h2 class="info-item text-4xl">Visitantes Activos : {{ activated }}</h2>
         <h3 class="info-item text-lg">Cerradas : {{ closed }}</h3>
+        <h3 class="info-item text-lg">Cerradas Hoy : {{ closedToday }}</h3>
 
         <div class="box-time absolute top-[262px] left-[451px] flex flex-row justify-center items-center">
           <img src="../assets/svg/watch.svg" alt="svg watch" class="icon-watch">
@@ -29,6 +30,7 @@ export default {
       amount: null,
       closed: null,
       activated: null,
+      closedToday: null,
       hour: null,
       minutes: null,
       seconds: null,
@@ -38,30 +40,21 @@ export default {
     this.getTime();
   },
   methods: {
+    logOut() {
+      localStorage.clear();
+      this.$router.push("/");
+    },
     async getResume() {
       try {
         const response = await this.axios.get('/home/resume/');
         if (response.status === 200) {
           this.closed = response.data.closed;
           this.activated = response.data.activated;
+          this.closedToday = response.data.today;
         }
       } catch (error) {
-        console.log(error);
-      }
-    },
-    async releaseLocation() {
-      try {
-        const response = await this.axios.put('/locations/update/', {
-          available: true
-        });
-        if (response.status === 200) {
-          localStorage.clear();
-          this.$router.push("/");
-        }
-      } catch (error) {
-        if (error.response.status === 404) {
-          this.message = "Error No se Desactivo la localizacion";
-          this.showMessage = true;
+        if (error.response.status === 401) {
+          this.logOut()
         }
       }
     },

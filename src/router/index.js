@@ -14,6 +14,7 @@ import AddBuilding from "../views/AddBuilding.vue";
 import AddLocation from "../views/AddLocation.vue";
 import SelectLocation from "../views/SelectLocation.vue";
 import NotFound from "../views/NotFound.vue";
+import Users from "../views/Users.vue";
 
 const routes = [
     {path: "/", component: Auth},
@@ -30,6 +31,7 @@ const routes = [
     {path: "/building", component: AddBuilding},
     {path: "/coordinate", component: AddLocation},
     {path: "/location", component: SelectLocation},
+    {path: "/users", component: Users},
     {path: "/:notFound(.*)", component: NotFound}
 ];
 

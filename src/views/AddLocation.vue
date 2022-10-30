@@ -46,24 +46,9 @@ export default {
     }
   },
   methods: {
-    async releaseLocation() {
-      try {
-        const response = await this.axios.put('/locations/update/', {
-          available: true
-        });
-        if (response.status === 200) {
-          localStorage.clear();
-          this.$router.push("/");
-        }
-      } catch (error) {
-
-        if (error.response.status === 404) {
-          this.message = "Error No se Desactivo la localizacion";
-          this.showMessage = true;
-
-        }
-
-      }
+    logOut() {
+      localStorage.clear();
+      this.$router.push("/");
     },
     closeTab() {
       this.showMessage = false
@@ -110,9 +95,12 @@ export default {
             this.message = "Error coordenada ya registrada"
             this.showMessage = true
 
-          } else {
-            this.message = "Error Coordenada no Agregada"
+          } else if (error.response.status === 403) {
+            this.message = "Error no tienes permisos para realizar esta accion"
             this.showMessage = true
+
+          } else if (error.response.status === 401) {
+            this.logOut()
           }
         })
       } else {
@@ -128,6 +116,11 @@ export default {
           }).catch(error => {
             if (error.response.status === 404) {
               this.message = "No hay Edificios Registrados"
+              this.showMessage = true
+            }else if(error.response.status === 401){
+              this.logOut()
+            }else if(error.response.status === 403){
+              this.message = "Error no tienes permisos para realizar esta accion"
               this.showMessage = true
             }
           });
