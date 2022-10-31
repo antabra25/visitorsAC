@@ -9,7 +9,7 @@
         message
       }}
     </info-message>
-    <web-cam @upload-photo="(canva) => (photo = canva)" />
+    <web-cam @upload-photo="(canva) => (photo = canva)"/>
 
     <form @submit.prevent="sendVisit" ref="visit">
       <h2 class="sub mb-[25px]">Datos Personales</h2>
@@ -295,9 +295,18 @@ export default {
       }
     },
 
-    validatePhone() {
+    async validatePhone() {
       if (this.phone != "" && this.phone.length === 11) {
-        this.validPhone = true;
+        const isPhoneValid = await this.axios.get(`/visitors/verify/?phone=${this.phone}`);
+        console.log(isPhoneValid.data);
+        if (isPhoneValid.data===true) {
+          this.validPhone = false;
+          this.phoneMessage = "El numero de telefono ya esta registrado";
+
+        } else {
+          this.validPhone = true;
+          this.phoneMessage = "";
+        }
       } else {
         this.validPhone = false;
         this.phoneMessage = "Campo vacio o invalido";
