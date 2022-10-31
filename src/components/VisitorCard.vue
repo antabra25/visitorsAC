@@ -14,8 +14,8 @@
           <h2>Piso: {{ flat }}</h2>
         </div>
         <div class="controls-btn items-end">
-          <edit-button @check="checkVisitor"/>
-          <delete-button @close="closeVisit"/>
+          <edit-button @check="$emit('check',this.visitor)"/>
+          <delete-button @close="$emit('close',this.id)"/>
         </div>
       </div>
     </div>
@@ -29,7 +29,8 @@ import DeleteButton from "./DeleteButton.vue";
 
 export default {
   name: "VisitorCard",
-  props: ['name', 'lastname', 'ci', 'office', 'building', 'flat', 'photo'],
+  props: ['name', 'lastname', 'ci', 'office', 'building', 'flat', 'photo', 'id','visitor'],
+  emits:['close','check'],
   components: {
     DeleteButton,
     EditButton
@@ -37,14 +38,7 @@ export default {
   data() {
     return {}
   },
-  methods: {
-    async checkVisitor() {
 
-    },
-    async closeVisit() {
-
-    }
-  }
 };
 </script>
 

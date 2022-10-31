@@ -9,7 +9,7 @@
         message
       }}
     </info-message>
-    <web-cam @upload-photo="(canva) => (photo = canva)" :photo="serverPhoto"/>
+    <web-cam @upload-photo="(canva) => (photo = canva)" />
 
     <form @submit.prevent="sendVisit" ref="visit">
       <h2 class="sub mb-[25px]">Datos Personales</h2>

@@ -1,16 +1,14 @@
 <template>
-  <button class="delete-btn">
-    <router-link to="">
+  <button class="delete-btn" @click="$emit('close')">
       <img src="../assets/svg/delete-circle.svg">
-    </router-link>
-
   </button>
 
 </template>
 
 <script>
 export default {
-  name: "DeleteButton"
+  name: "DeleteButton",
+  emits: ['close']
 };
 </script>
 

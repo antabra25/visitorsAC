@@ -6,15 +6,19 @@
     <search-input name="Buscar" class="ml-[78px] mt-8"></search-input>
     <div class="visitor-layout">
       <visitor-card
-          v-for="visitor in visitors"
-          :key="visitor.ci"
+          v-for="visitor in visits"
+          :key="visitor.visitId"
+          :id="visitor.visitId"
+          :visitor="visitor.visitorId"
           :name="visitor.name"
           :lastname="visitor.lastname"
           :ci="visitor.ci"
           :office="visitor.office"
           :building="visitor.building"
           :flat="visitor.flat"
-          :photo="visitor.photo">
+          :photo="visitor.photo"
+          @close="closeVisit"
+          @check="checkVisitor">
       </visitor-card>
     </div>
   </div>
@@ -35,7 +39,7 @@ export default {
   },
   data() {
     return {
-      visitors: null,
+      visits: null,
       message: '',
       showMessage: false,
     };
@@ -48,11 +52,47 @@ export default {
       localStorage.clear()
       this.$router.push("/")
     },
-    async loadActiveVisitors() {
+    async checkVisitor(visitorId) {
+      const user = localStorage.getItem('user_id')
+      console.log(user)
       try {
-        const response = await this.axios.get("/visits/active/visitors");
+        const response = await this.axios.post("/check/manual", {'visitor': visitorId, 'user': user})
+        if (response.status === 201) {
+          this.message = "Visitante verificado con exito"
+          this.showMessage = true
+        }
+      } catch (error) {
+        if (error.response.status === 403) {
+          this.message = "No tiene permisos necesarios"
+          this.showMessage = true
+        } else if (error.response.status === 401) {
+          this.logOut()
+        }
+
+      }
+
+
+    },
+    async closeVisit(id) {
+      try {
+        const response = await this.axios.put(`/visits/close/${id}/`);
         if (response.status === 200) {
-          this.visitors = response.data;
+          await this.loadActiveVisits()
+        }
+      } catch (error) {
+        if (error.response.status === 401) {
+          this.logOut()
+        }
+
+      }
+
+    },
+
+    async loadActiveVisits() {
+      try {
+        const response = await this.axios.get("/visits/active/");
+        if (response.status === 200) {
+          this.visits = response.data;
           console.log(this.visitors)
         }
       } catch (error) {
@@ -67,7 +107,7 @@ export default {
     }
   },
   mounted() {
-    this.loadActiveVisitors();
+    this.loadActiveVisits();
   }
 
 };

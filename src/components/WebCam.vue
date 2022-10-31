@@ -17,12 +17,6 @@ import SmallButton from "./SmallButton.vue";
 export default {
   name: "WebCam",
   emits: ["uploadPhoto"],
-  props: {
-    photo: {
-      type: String,
-      default: ""
-    }
-  },
   components: {
     SmallButton
   },
