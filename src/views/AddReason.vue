@@ -12,31 +12,32 @@
         <base-button class="register-btn ">Registrar</base-button>
       </div>
     </form>
-
-    <table class="table-fixed">
-      <thead>
-      <tr>
-        <th class="w-[38px]">Nro</th>
-        <th class="w-[462px]">Motivo</th>
-        <th>Editar</th>
-        <th>Eliminar</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr v-for="reason in reasons" :key="reason.reason_id">
-        <td>{{ reason.reason_id }}</td>
-        <td>{{ reason.name }}</td>
-        <td>
-          <button>
-            <router-link to="/reason/edit/:reasonId"><img src="../assets/svg/bx-edit.svg"></router-link>
-          </button>
-        </td>
-        <td>
-          <button @click="deleteReason(reason.reason_id)"><img src="../assets/svg/delete-circle.svg" alt=""></button>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+    <div class="table-wrapper">
+      <table >
+        <thead>
+        <tr>
+          <th class="w-[38px]">Nro</th>
+          <th class="w-[462px]">Motivo</th>
+          <th>Editar</th>
+          <th>Eliminar</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="reason in reasons" :key="reason.reason_id">
+          <td>{{ reason.reason_id }}</td>
+          <td>{{ reason.name }}</td>
+          <td>
+            <button>
+              <router-link to="/reason/edit/:reasonId"><img src="../assets/svg/bx-edit.svg"></router-link>
+            </button>
+          </td>
+          <td>
+            <button @click="deleteReason(reason.reason_id)"><img src="../assets/svg/delete-circle.svg" alt=""></button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
 
   </div>
 
@@ -47,6 +48,7 @@
 import EntryLong from "../components/EntryLong.vue";
 import BaseButton from "../components/BaseButton.vue";
 import InfoMessage from "../components/InfoMessage.vue";
+
 
 export default {
   name: "AddReason",
@@ -135,7 +137,7 @@ export default {
         } catch (error) {
 
           if (error.response.status === 401) {
-            this.loadReasons()
+           await this.loadReasons()
 
           } else if (error.response.status == 404 && JSON.parse(error.response.request.responseText).detail === "Field Name Duplicate") {
             this.message = "Error.El motivo ya existe"
@@ -183,6 +185,8 @@ table, th, td {
 td {
   @apply text-center h-[30px]
 }
+
+
 
 
 </style>

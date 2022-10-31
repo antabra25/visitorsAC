@@ -19,7 +19,7 @@
         <input type="radio" id="date" value="date" v-model="picked"/>
         <label for="date">Fecha</label>
       </div>
-
+      <div class="table-wrapper">
       <table class="table-auto">
         <thead>
         <th>Nro</th>
@@ -56,6 +56,7 @@
         </tr>
         </tbody>
       </table>
+        </div>
     </div>
     <pagination-button  @left="()=>pageNumber--" @right="()=>pageNumber++">
       Cargar más
