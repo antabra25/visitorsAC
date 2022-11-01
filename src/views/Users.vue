@@ -1,5 +1,8 @@
 <template>
   <div class="main-content-wrapper">
+  <Table idName="role_id" :headers="headers">
+
+  </Table>
 
   </div>
 </template>
@@ -11,7 +14,8 @@ export default {
     return {
       users: null,
       message: "",
-      showMessage: false
+      showMessage: false,
+      headers:["role_id",""]
     };
   },
 }
