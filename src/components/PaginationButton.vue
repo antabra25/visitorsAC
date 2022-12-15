@@ -1,5 +1,5 @@
 <template>
-  <div class="pagination-btn-wrapper ">
+  <div class="pagination-btn-wrapper">
     <button class="baseButton" @click="$emit('left')">&lt</button>
     <button class="baseButton" @click="$emit('right')">&gt</button>
   </div>

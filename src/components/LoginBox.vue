@@ -57,7 +57,7 @@ export default {
       if (this.validUserName && this.validPassword) {
 
 
-        const payload = new URLSearchParams()
+        const payload = new FormData()
         payload.append("username", this.username)
         payload.append("password", this.password)
         const customConfig = {
